@@ -31,7 +31,8 @@ STAGING="$(mktemp -d)"
 unzip -qo "$ZIP" -d "$STAGING"
 
 # Per-user font install dir (Windows 10/11, no admin).
-FONT_DIR="$LOCALAPPDATA/Microsoft/Windows/Fonts"
+# Overridable (e.g. FONT_DIR=/tmp/fonts-test) for sandboxed testing.
+FONT_DIR="${FONT_DIR:-$LOCALAPPDATA/Microsoft/Windows/Fonts}"
 
 # We install the Mono variants (HackNerdFontMono-*.ttf) plus the standard
 # HackNerdFont-*.ttf set, mirroring what's live in the user fonts dir.
