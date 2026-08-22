@@ -1,0 +1,80 @@
+name: carbonfox
+description: "Eden carbonfox — matches WezTerm + zellij + nvim carbonfox. Palette from EdenEast/nightfox.nvim lua/nightfox/palette/carbonfox.lua."
+
+# Carbonfox palette (EdenEast/nightfox carbonfox.lua):
+#   bg #161616  fg #f2f4f8  bg1 #2a2a2a  blue #78a9ff  cyan #33b1ff
+#   green #25be6a  purple #be95ff  red #ee5396  orange #3ddbd9
+#   dim #dfdfe0  comment #7f8489
+colors:
+  background: "#161616"              # App/base surface
+  banner_border: "#78a9ff"           # Panel border (carbonfox blue)
+  banner_title: "#f2f4f8"            # Panel title (carbonfox fg)
+  banner_accent: "#78a9ff"           # Section headers (blue)
+  banner_dim: "#7f8489"              # Dim/muted text (carbonfox comment)
+  banner_text: "#f2f4f8"             # Body text
+  ui_accent: "#78a9ff"               # General UI accent (blue)
+  ui_label: "#33b1ff"                # UI labels (light-blue)
+  ui_ok: "#25be6a"                   # Success (green)
+  ui_error: "#ee5396"                # Error (red)
+  ui_warn: "#ff9e64"                 # Warning (warm orange)
+  ui_tool: "#33b1ff"                 # Tool-call markers (cyan)
+  ui_thinking: "#be95ff"             # Reasoning/thinking text (purple)
+  diff_added: "#161616"              # Diff added-line background
+  diff_removed: "#161616"            # Diff removed-line background
+  diff_added_word: "#25be6a"         # Diff added word fg (green)
+  diff_removed_word: "#ee5396"       # Diff removed word fg (red)
+  syntax_string: "#33b1ff"           # Code strings (cyan)
+  syntax_number: "#be95ff"           # Code numbers (purple)
+  syntax_keyword: "#78a9ff"          # Code keywords (blue)
+  syntax_comment: "#7f8489"          # Code comments (carbonfox comment)
+  prompt: "#f2f4f8"                  # Prompt text color
+  input_rule: "#78a9ff"              # Input area horizontal rule (blue)
+  response_border: "#78a9ff"         # Response box border (blue)
+  status_bar_bg: "#161616"           # Status bar background
+  status_bar_text: "#dfdfe0"         # Status bar default text
+  status_bar_strong: "#f2f4f8"       # Status bar highlighted text
+  status_bar_dim: "#7f8489"          # Status bar separators/muted text
+  status_bar_good: "#25be6a"         # Healthy context usage (green)
+  status_bar_warn: "#ff9e64"         # Warning context usage (orange)
+  status_bar_bad: "#ee5396"          # High context usage (red)
+  status_bar_critical: "#ff5f5f"     # Critical context usage
+  session_label: "#78a9ff"           # Session label color (blue)
+  session_border: "#7f8489"          # Session ID dim color
+  voice_status_bg: "#161616"         # TUI voice status background
+  selection_bg: "#2a2a2a"            # TUI mouse-selection highlight background
+  completion_menu_bg: "#161616"      # Completion menu background
+  completion_menu_current_bg: "#2a2a2a"   # Active completion row background
+  completion_menu_meta_bg: "#161616"       # Completion meta column background
+  completion_menu_meta_current_bg: "#2a2a2a"  # Active completion meta background
+
+# Branding — keep agent identity, tune nothing for theme.
+branding:
+  agent_name: "Hermes Agent"
+
+# banner_hero is a TOP-LEVEL skin key (skin_engine.py:857 reads data["banner_hero"],
+# NOT branding.banner_hero). Replaces HERMES_CADUCEUS in CLI + TUI.
+# Single-color cat in box (static hero) - carbonfox cyan #33b1ff, hjw removed.
+banner_hero: |
+  [#33b1ff]  ,-.       _,---._ __  / \[/]
+  [#33b1ff] /  )    .-'       `./ /   \[/]
+  [#33b1ff](  (   ,'            `/    /|[/]
+  [#33b1ff] \  `-"             \'\   / |[/]
+  [#33b1ff]  `.              ,  \ \ /  |[/]
+  [#33b1ff]   /`.          ,'-`----Y   |[/]
+  [#33b1ff]  (            ;        |   '[/]
+  [#33b1ff]  |  ,-.    ,-'         |  /[/]
+  [#33b1ff]  |  | (   |  $TOKENS   | /[/]
+  [#33b1ff]  )  |  \  `.___________|/[/]
+  [#33b1ff]  `--'   `--'[/]
+
+
+# banner_logo is a TOP-LEVEL skin key too — replaces the big "HERMES AGENT"
+# pixel header in CLI + TUI. Swan (left) + "LUCKY TO HAVE AGENCY" block-font
+# (right) inline. TUI caveat: ONE color tag per row (parseRichMarkup splits each
+# tag into its own line — two tags = two stacked rows). Per-row carbonfox gradient.
+banner_logo: |
+  [#78a9ff]                                                                                                           __..--''``---....___   _..._    __[/]
+  [#33b1ff]   __   __  _________ ____  __   _      ______________ __   ___  __________  _________  __       /// //_.-'    .-/";  `        ``<._  ``.''_ `. / // /[/]
+  [#3ddbd9]  / /  / / / / ___/ //_/\ \/ /  | | /| / /  _/_  __/ // /  / _ |/ ___/ __/ |/ / ___/\ \/ /     ///_.-' _..--.'_    \                    `( ) ) // //[/]
+  [#be95ff] / /__/ /_/ / /__/ ,<    \  /   | |/ |/ // /  / / / _  /  / __ / (_ / _//    / /__   \  /       / (_..-' // (< _     ;_..__               ; `' / ///[/]
+  [#78a9ff]/____/\____/\___/_/|_|   /_/    |__/|__/___/ /_/ /_//_/  /_/ |_\___/___/_/|_/\___/   /_/         / // // //  `-._,_)' // / ``--...____..-' /// / //[/]
