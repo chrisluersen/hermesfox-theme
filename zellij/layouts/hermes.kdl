@@ -1,0 +1,33 @@
+// zellij layout: hermes (Hermes-first) — Hermes TUI fills the tab (100%).
+// nvim is summoned on demand as a FLOATING pane via the Ctrl+o e keybind
+// (defined in config.kdl session mode) — it takes 0% width until called.
+// Renamed from herm.kdl 2026-08-12. Launch with `zellij --layout hermes`.
+//
+// Rationale: Hermes is the actor (web reading/searching) and fills the screen.
+// nvim is NOT a tiled split — it floats over the tab when summoned, for quick
+// file creation or an .md edit. Minimal editing: nvim opens plain (no LazyGit,
+// no project noise); `:e <name>` creates or opens a file.
+//
+// split_direction is the DIVIDER orientation, NOT the pane arrangement:
+//   "vertical"   = side-by-side (left/right). First child = LEFT, second = RIGHT.
+//   "horizontal" = stacked (top/bottom). Do NOT use "horizontal" here — it stacks.
+// NOTE: layout-defined floating_panes show at startup, so the scratchpad nvim
+// lives in the Ctrl+o e keybind instead (Run ... { floating true }), NOT here.
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zjstatus"
+        }
+    }
+
+    tab name="hermes" focus=true {
+        pane split_direction="vertical" {
+            pane name="hermes" size="100%" command="C:/Users/chris/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
+        }
+    }
+}

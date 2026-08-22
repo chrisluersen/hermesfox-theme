@@ -1,0 +1,8 @@
+# Local / ephemeral — never commit
+.DS_Store
+Thumbs.db
+*.log
+
+# No font binaries are vendored — install via fonts/install-hack-nerd-font.sh
+*.ttf
+*.otf

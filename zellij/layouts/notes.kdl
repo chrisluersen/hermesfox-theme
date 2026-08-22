@@ -1,0 +1,36 @@
+// zellij layout: notes (two-tab finder + editor) — yazi file finder in tab 1,
+// nvim editor in tab 2. Opening a file in yazi sends it to the editor tab via
+// the yazi opener (config at %APPDATA%\yazi\config\yazi.toml), which runs:
+//   zellij action go-to-tab 1 && zellij action write "nvim <path>\r"
+// The editor tab is a plain SHELL so the write can launch nvim into it; after
+// :q you're back at the shell, ready for the next file.
+// Launch with `zellij --layout notes`. Reworked 2026-08-12 (was yazi|nvim|glow).
+//
+// split_direction is the DIVIDER orientation, NOT the pane arrangement:
+//   "vertical"   = side-by-side (left/right).
+//   "horizontal" = stacked (top/bottom). Do NOT use "horizontal" here.
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zjstatus"
+        }
+    }
+
+    tab name="files" focus=true {
+        pane split_direction="vertical" {
+            pane name="files" size="100%" command="C:/Users/chris/scoop/apps/yazi/26.5.6/yazi.exe"
+        }
+    }
+
+    tab name="editor" focus=false {
+        pane split_direction="vertical" {
+            // Plain shell — the yazi opener writes `nvim <path>\r` here.
+            pane name="editor" size="100%"
+        }
+    }
+}

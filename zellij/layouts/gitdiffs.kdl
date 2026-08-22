@@ -1,0 +1,31 @@
+// zellij layout: gitdiffs (PR/MR diff review) — nvim (left, 55%) + Hermes TUI (right, 45%).
+// Launch with `zellij --layout gitdiffs`.
+//
+// Created 2026-08-11 as "review"; renamed to gitreview 2026-08-12 (self-documenting),
+// then to gitdiffs 2026-08-12. Rebalanced nvim 60/40 -> 55/45 (hermes pane was too cramped).
+//   nvim on the LEFT opens lazygit (<leader>gg / LazyGit) so the diff is ready;
+//   Hermes --tui on the RIGHT drafts the review comments. Reverse of dev — here
+//   Hermes is the actor that reads the diff and writes the review.
+//
+// split_direction is the DIVIDER orientation, NOT the pane arrangement:
+//   "vertical"   = side-by-side (left/right). First child = LEFT, second = RIGHT.
+//   "horizontal" = stacked (top/bottom). Do NOT use "horizontal" here — it stacks.
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zjstatus"
+        }
+    }
+
+    tab name="gitdiffs" focus=true {
+        pane split_direction="vertical" {
+            pane name="editor" size="55%" command="C:/Program Files/Neovim/bin/nvim.exe" args="-c LazyGit"
+            pane name="hermes" size="45%" command="C:/Users/chris/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
+        }
+    }
+}

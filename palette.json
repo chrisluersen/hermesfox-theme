@@ -1,0 +1,37 @@
+{
+  "name": "carbonfox",
+  "description": "EdenEast Nightfox Carbonfox palette adapted for Hermes and common developer tools.",
+  "colors": {
+    "background": "#161616",
+    "backgroundAlt": "#0d0d0d",
+    "surface": "#282828",
+    "surfaceSelected": "#525253",
+    "foreground": "#f2f4f8",
+    "foregroundAlt": "#dfdfe0",
+    "muted": "#97999b",
+    "border": "#525253",
+    "blue": "#78a9ff",
+    "cyan": "#33b1ff",
+    "green": "#25be6a",
+    "cyanBright": "#3ddbd9",
+    "purple": "#be95ff",
+    "red": "#ee5396",
+    "teal": "#08bdba"
+  },
+  "semantics": {
+    "accent": "#78a9ff",
+    "tool": "#33b1ff",
+    "thinking": "#be95ff",
+    "success": "#25be6a",
+    "warning": "#08bdba",
+    "error": "#ee5396",
+    "syntaxString": "#25be6a",
+    "syntaxNumber": "#3ddbd9",
+    "syntaxKeyword": "#be95ff",
+    "syntaxComment": "#97999b",
+    "diffAddedForeground": "#25be6a",
+    "diffRemovedForeground": "#ee5396",
+    "diffAddedBackground": "#161616",
+    "diffRemovedBackground": "#161616"
+  }
+}

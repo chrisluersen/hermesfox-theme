@@ -1,0 +1,95 @@
+{
+    "files.autoSave": "afterDelay",
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    // Font....................................................................................................
+    "editor.fontFamily": "'Hack Nerd Font Mono', Consolas, 'Courier New', monospace",
+    // Formatting....................................................................................................
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    // Linting....................................................................................................
+    "python.linting.enabled": true,
+    "python.linting.maxNumberOfProblems": 20,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "settingsSync.ignoredSettings": [
+        "-python.condaPath"
+    ],
+    "editor.fontSize": 16,
+    "python.autoComplete.extraPaths": [],
+    "python.analysis.extraPaths": [],
+    "git.enableSmartCommit": true,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "python.defaultInterpreterPath": "C:\\Users\\chris\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "[python]": {
+        "editor.formatOnType": true,
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "explorer.confirmDelete": false,
+    "jupyter.interactiveWindow.creationMode": "perFile",
+    "editor.minimap.renderCharacters": false,
+    "editor.minimap.enabled": false,
+    "notebook.formatOnSave.enabled": true,
+    "notebook.lineNumbers": "on",
+    "jupyter.askForKernelRestart": false,
+    "git.ignoreRebaseWarning": true,
+    "settingsSync.ignoredExtensions": [
+        "ms-vscode.azure-repos"
+    ],
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "chat.mcp.gallery.enabled": true,
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "chat.viewSessions.orientation": "stacked",
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "files.associations": {
+        ".env*": "dotenv"
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "keyword.other.dotenv",
+                "settings": {
+                    "foreground": "#FF000000"
+                }
+            }
+        ]
+    },
+    "workbench.browser.showInTitleBar": true,
+    "markdown-preview-enhanced.enablePreviewZenMode": false,
+    "markdown-preview-enhanced.previewTheme": "vscode.css",
+    "claudeCode.preferredLocation": "panel",
+    "explorer.confirmDragAndDrop": false,
+    "workbench.panel.showLabels": false,
+    "workbench.notifications.position": "top-right",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.activityBar.location": "top",
+    "remote.portsAttributes": {
+        "9119": {
+            "protocol": "http"
+        }
+    },
+    "workbench.experimental.share.enabled": true,
+    "terminal.integrated.fontSize": 18,
+    "workbench.startupEditor": "none",
+    "chat.titleBar.openInAgentsWindow.enabled": false,
+    "workbench.sideBar.location": "right",
+    "terminal.integrated.initialHint": false,
+    "window.commandCenter": false,
+    // Extra....................................................................................................
+}

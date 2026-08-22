@@ -1,0 +1,29 @@
+// zellij layout: dev (daily driver) — nvim (left, 55%) + Hermes TUI (right, 45%).
+// Launch with `zellij` (default_layout "dev").
+//
+// Updated 2026-08-12: nvim LEFT 55%, hermes --tui RIGHT 45% (was 60/40 — hermes
+// pane was too cramped; 55/45 keeps editor primary but gives the agent room).
+// NOTE: split_direction is the DIVIDER orientation, NOT the pane arrangement.
+//   "vertical"   = vertical divider = side-by-side (left/right). First child =
+//                  LEFT column, second = RIGHT.
+//   "horizontal" = horizontal divider = stacked (top/bottom). Do NOT use
+//                  "horizontal" here — it stacks panes instead of side-by-side.
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zjstatus"
+        }
+    }
+
+    tab name="dev" focus=true {
+        pane split_direction="vertical" {
+            pane name="editor" size="55%" command="C:/Program Files/Neovim/bin/nvim.exe"
+            pane name="hermes" size="45%" command="C:/Users/chris/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
+        }
+    }
+}
