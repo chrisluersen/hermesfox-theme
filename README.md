@@ -1,4 +1,21 @@
+```text
+           __..--''``---....___   _..._    __
+ /// //_.-'    .-/";  `        ``<._  ``.''_ `. / // /
+///_.-' _..--.'_    \                    `( ) ) // //
+/ (_..-' // (< _     ;_..__               ; `' / ///
+ / // // //  `-._,_)' // / ``--...____..-' /// / //
+```
+
 # hermesfox-theme
+
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-brightgreen)](#)
+[![palette](https://img.shields.io/badge/palette-Carbonfox-8b5cf6)](#)
+[![topic](https://img.shields.io/badge/topic-terminal_theme-4ade80)](#)
+
+
+<!-- og:image for GitHub social preview -->
+<img src="docs/assets/og-hermesfox-theme.png" alt="hermesfox-theme social preview" width="100%">
 
 A cross-application **Carbonfox** theme for the whole terminal stack — Hermes
 Agent, WezTerm, Windows Terminal, zellij, nvim, and VS Code — plus the banner
