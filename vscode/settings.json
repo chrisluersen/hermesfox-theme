@@ -23,7 +23,7 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    "python.defaultInterpreterPath": "C:\\Users\\chris\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "python.defaultInterpreterPath": "${userHome}\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
     "[python]": {
         "editor.formatOnType": true,
         "editor.defaultFormatter": "ms-python.python"

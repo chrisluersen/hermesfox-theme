@@ -1,4 +1,4 @@
--- WezTerm config for Chris: GITDIFFS layout variant (PR/MR diff review)
+-- WezTerm config: GITDIFFS layout variant (PR/MR diff review)
 -- Mirrors wezterm.lua but spawns zellij with --layout gitdiffs
 -- (nvim+lazygit LEFT, hermes --tui RIGHT for drafting the review).
 -- Used by the "Hermes (Git Diffs)" Start Menu shortcut. Kept separate from
@@ -7,10 +7,13 @@
 -- 2026-08-12: renamed review -> gitreview, then gitreview -> gitdiffs.
 local wezterm = require 'wezterm'
 
+-- Zellij launcher path derived from env (portable — no hardcoded user dir).
+local zellij = os.getenv('LOCALAPPDATA') .. '\\Zellij\\zellij.exe'
+
 -- Launch zellij with the gitdiffs layout (nvim+lazygit left, hermes right).
 wezterm.on('gui-startup', function()
   wezterm.mux.spawn_window({
-    args = { 'C:\\\\Users\\\\chris\\\\AppData\\\\Local\\\\Zellij\\\\zellij.exe', '--layout', 'gitdiffs' }
+    args = { zellij, '--layout', 'gitdiffs' }
   })
 end)
 

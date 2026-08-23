@@ -27,7 +27,7 @@ layout {
 
     tab name="hermes" focus=true {
         pane split_direction="vertical" {
-            pane name="hermes" size="100%" command="C:/Users/chris/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
+            pane name="hermes" size="100%" command="C:/Users/<USER>/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
         }
     }
 }

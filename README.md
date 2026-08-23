@@ -1,12 +1,12 @@
 # hermesfox-theme
 
-Chris's personal cross-application **Carbonfox** theme for the whole terminal
-stack — Hermes Agent, WezTerm, Windows Terminal, zellij, nvim, and VS Code —
-plus the banner ASCII-art archive and the font setup.
+A cross-application **Carbonfox** theme for the whole terminal stack — Hermes
+Agent, WezTerm, Windows Terminal, zellij, nvim, and VS Code — plus the banner
+ASCII-art archive and the font setup.
 
 The palette originates from [EdenEast/nightfox.nvim]
-(`lua/nightfox/palette/carbonfox.lua`). This repo is the canonical home for
-how Chris applies it, end to end.
+(`lua/nightfox/palette/carbonfox.lua`). This repo is the canonical, portable
+home for that palette applied end to end.
 
 > **2026-08-22:** this repo replaces the previous Carbonfox gist
 > (`16349ada05bdf04399aa328fd0231184`), which was folded in and retired.
@@ -66,8 +66,9 @@ the TTFs per-user (no admin), and registers the font in the registry.
 
 ## Install / point configs at this repo
 
-The configs here are **the working copies** that live on Chris's machine. To
-restore them on a fresh machine, copy each file to its live location:
+The configs here are working copies. To restore them on a fresh machine, copy
+each file to its live location (paths in the zellij layouts and nvim use a
+`<USER>` placeholder — replace it with your Windows username):
 
 | Repo file | Live location |
 |---|---|
@@ -77,6 +78,12 @@ restore them on a fresh machine, copy each file to its live location:
 | `zellij/config.kdl`, `zellij/layouts/*.kdl` | `%APPDATA%/Zellij/config/` |
 | `nvim/init.lua` | `%LOCALAPPDATA%/nvim/init.lua` |
 | `vscode/settings.json` | `%APPDATA%/Code/User/settings.json` |
+
+> **Portable paths:** WezTerm and VS Code configs derive paths from env vars
+> (`os.getenv('LOCALAPPDATA')`, `${userHome}`), so they work on any machine.
+> The zellij layouts and nvim carry a `<USER>` placeholder in launcher paths —
+> swap it for your username. The plugin paths in `zellij/config.kdl` point at
+> the user data dir; re-point them to your `%APPDATA%/Zellij/data/plugins/`.
 
 ## License
 

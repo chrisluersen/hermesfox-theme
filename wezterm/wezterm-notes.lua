@@ -1,4 +1,4 @@
--- WezTerm config for Chris: NOTES layout variant (minimalist md/txt editor)
+-- WezTerm config: NOTES layout variant (minimalist md/txt editor)
 -- Mirrors wezterm.lua but spawns zellij with --layout notes
 -- (yazi file viewer LEFT, nvim editor MIDDLE, glow markdown preview RIGHT).
 -- Used by the "Hermes (Notes)" Start Menu shortcut. Kept separate from
@@ -6,10 +6,13 @@
 -- 2026-08-11 (v1): work-mode layout for reading/writing notes and markdown.
 local wezterm = require 'wezterm'
 
+-- Zellij launcher path derived from env (portable — no hardcoded user dir).
+local zellij = os.getenv('LOCALAPPDATA') .. '\\Zellij\\zellij.exe'
+
 -- Launch zellij with the notes layout (yazi | nvim | glow).
 wezterm.on('gui-startup', function()
   wezterm.mux.spawn_window({
-    args = { 'C:\\Users\\chris\\AppData\\Local\\Zellij\\zellij.exe', '--layout', 'notes' }
+    args = { zellij, '--layout', 'notes' }
   })
 end)
 

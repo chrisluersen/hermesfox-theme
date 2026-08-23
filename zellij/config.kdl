@@ -157,7 +157,7 @@ keybinds clear-defaults=true {
             // (prompt_toolkit, in the hermes venv). Accessible from every layout.
             // Use the full venv python.exe so the pane's PATH can't pick a different
             // python lacking prompt_toolkit.
-            Run "C:/Users/chris/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe" "C:/Users/chris/AppData/Local/hermes/scripts/session-viewer.py" {
+            Run "C:/Users/<USER>/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe" "C:/Users/<USER>/AppData/Local/hermes/scripts/session-viewer.py" {
                 floating true
                 width "70%"
                 height "80%"
@@ -311,7 +311,7 @@ plugins {
     // -- Power-user upgrades (2026-08-11) --
     // zellij-autolock: auto-switches to Locked mode when nvim/vim is focused so
     //   Ctrl+hjkl pass through to the editor (seamless pane <-> nvim window nav).
-    autolock location="file:C:/Users/chris/AppData/Roaming/Zellij/data/plugins/zellij-autolock.wasm" {
+    autolock location="file:C:/Users/<USER>/AppData/Roaming/Zellij/data/plugins/zellij-autolock.wasm" {
         is_enabled true
         triggers "nvim|vim"
         reaction_seconds "0.3"
@@ -329,7 +329,7 @@ plugins {
     //   config lives HERE as a plugin alias — every layout references it by the
     //   bare `location="zjstatus"` instead of duplicating ~35 lines per layout.
     //   (Plugin aliases carry optional config: zellij.dev/documentation/plugin-aliases)
-    zjstatus location="file:C:/Users/chris/AppData/Roaming/Zellij/data/plugins/zjstatus.wasm" {
+    zjstatus location="file:C:/Users/<USER>/AppData/Roaming/Zellij/data/plugins/zjstatus.wasm" {
         hide_frame_for_single_pane "true"
 
         // carbonfox palette (matches WezTerm + nvim): bg #161616, fg #f2f4f8
@@ -355,7 +355,7 @@ plugins {
         datetime_format "%d %b %H:%M"
     }
     // zellij-forgot: keybind cheatsheet overlay (Ctrl+o then g).
-    forgot location="file:C:/Users/chris/AppData/Roaming/Zellij/data/plugins/zellij_forgot.wasm"
+    forgot location="file:C:/Users/<USER>/AppData/Roaming/Zellij/data/plugins/zellij_forgot.wasm"
 }
 
 // Plugins to load in the background when a new session starts

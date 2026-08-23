@@ -61,8 +61,9 @@ vim.g.db_ui_show_database_icon = 1
 vim.g.db_ui_win_position = "right"
 vim.g.db_ui_winwidth = 40
 -- Predefined connections (edit/extend as needed — also addable via :DBUI with `+`)
+-- Example uses a per-user path: sqlite:///C:/Users/<USER>/db/test.sqlite
 vim.g.dbs = {
-  test_sqlite = "sqlite:///C:/Users/chris/db/test.sqlite",
+  test_sqlite = "sqlite:///C:/Users/<USER>/db/test.sqlite",
 }
 
 -- ═══════════════════════════════════════════════════════════════════════

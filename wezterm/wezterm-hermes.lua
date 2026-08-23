@@ -1,4 +1,4 @@
--- WezTerm config for Chris: HERMES layout variant (Hermes-first)
+-- WezTerm config: HERMES layout variant (Hermes-first)
 -- Mirrors wezterm.lua but spawns zellij with --layout hermes (Hermes TUI fills
 -- the tab at 100%; nvim summoned as a floating scratchpad via Ctrl+o then e).
 -- Used by the "Hermes (Hermes)" shortcuts.
@@ -8,10 +8,13 @@
 -- 2026-08-11 (v5): same stack as dev — WezTerm -> zellij -> layout "hermes".
 local wezterm = require 'wezterm'
 
+-- Zellij launcher path derived from env (portable — no hardcoded user dir).
+local zellij = os.getenv('LOCALAPPDATA') .. '\\Zellij\\zellij.exe'
+
 -- Launch zellij with the hermes layout (Hermes-first research layout).
 wezterm.on('gui-startup', function()
   wezterm.mux.spawn_window({
-    args = { 'C:\\Users\\chris\\AppData\\Local\\Zellij\\zellij.exe', '--layout', 'hermes' }
+    args = { zellij, '--layout', 'hermes' }
   })
 end)
 

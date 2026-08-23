@@ -8,10 +8,13 @@
 --   live in wezterm-<mode>.lua, each spawning `zellij --layout <mode>`.
 local wezterm = require 'wezterm'
 
+-- Zellij launcher path derived from env (portable — no hardcoded user dir).
+local zellij = os.getenv('LOCALAPPDATA') .. '\\Zellij\\zellij.exe'
+
 -- Launch the zellij workspace on GUI start. zellij reads default_layout "dev"
--- from C:\Users\chris\AppData\Roaming\Zellij\config\config.kdl.
+-- from %APPDATA%\Zellij\config\config.kdl.
 wezterm.on('gui-startup', function()
-  wezterm.mux.spawn_window({ args = { 'C:\\Users\\chris\\AppData\\Local\\Zellij\\zellij.exe' } })
+  wezterm.mux.spawn_window({ args = { zellij } })
 end)
 
 return {

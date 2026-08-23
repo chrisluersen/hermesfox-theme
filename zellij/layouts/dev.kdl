@@ -23,7 +23,7 @@ layout {
     tab name="dev" focus=true {
         pane split_direction="vertical" {
             pane name="editor" size="55%" command="C:/Program Files/Neovim/bin/nvim.exe"
-            pane name="hermes" size="45%" command="C:/Users/chris/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
+            pane name="hermes" size="45%" command="C:/Users/<USER>/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe" args="--tui"
         }
     }
 }
