@@ -9,16 +9,13 @@ Drop any new art you like in here as `.txt` files.
 - Up to ~70 cols on very wide terminals; keep ≤20 tall
 - One `[color]…[/]` tag per row when colored (TUI constraint)
 
-## Files (measured 2026-08-14)
-| File | Size | Views | Note |
-|------|------|-------|------|
-| `swan-chris-pick.txt` | 54×5 | — | **Chris's pick.** Fits the hero column |
-| `two-love-birds-jgs-37x10.txt` | 37×10 | 1,664 | jgs classic, fits well |
-| `two-birds-reading-jgs-52x16.txt` | 46×16 | 448 | jgs, fits on wide terminals |
-| `goose-shanaka-28x13.txt` | 28×13* | 346 | Shanaka Dias |
-| `swan-asciiart-46x18.txt` | 46×18* | 212 | asciiart.eu swan |
+## Active pieces (used by the skins)
+These are the sources of the banner art embedded in `hermes/skins/*.yaml`:
 
-\* Leading whitespace was stripped by web extraction — re-pad before use.
+| File | Size | Role |
+|------|------|------|
+| `catbox-unboxed-33x11.txt` | 33×11 | `banner_hero` — single-color cat in box |
+| `swan-chris-pick.txt` | 54×5 | `banner_logo` — swan (left) + block-font (right) |
 
 ## Sources
 - **asciiart.eu** — canonical archive, ranked by views. JS-rendered; use web extraction.
