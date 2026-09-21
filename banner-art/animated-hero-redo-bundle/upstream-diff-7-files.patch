@@ -1,0 +1,301 @@
+diff --git a/apps/shared/src/skin.ts b/apps/shared/src/skin.ts
+index d5c600da4..358b4eadc 100644
+--- a/apps/shared/src/skin.ts
++++ b/apps/shared/src/skin.ts
+@@ -105,6 +105,8 @@ export interface HermesSkin {
+   branding?: SkinBranding
+   banner_logo?: string
+   banner_hero?: string
++  /** Optional hero animation frames (each a full hero markup string). */
++  banner_hero_frames?: string[]
+   tool_prefix?: string
+   help_header?: string
+ }
+diff --git a/hermes_cli/skin_engine.py b/hermes_cli/skin_engine.py
+index a2a093b7d..61cd86d69 100644
+--- a/hermes_cli/skin_engine.py
++++ b/hermes_cli/skin_engine.py
+@@ -175,6 +175,7 @@ class SkinConfig:
+     tool_emojis: Dict[str, str] = field(default_factory=dict)  # per-tool emoji overrides
+     banner_logo: str = ""    # Rich-markup ASCII art logo (replaces HERMES_AGENT_LOGO)
+     banner_hero: str = ""    # Rich-markup hero art (replaces HERMES_CADUCEUS)
++    banner_hero_frames: List[str] = field(default_factory=list)  # animation frames (TUI hero)
+ 
+     def get_color(self, key: str, fallback: str = "") -> str:
+         """Get a color value with fallback."""
+@@ -818,6 +819,13 @@ def _mapping_or_empty(value: Any, *, section: str, skin_name: str) -> Dict[str,
+     return {}
+ 
+ 
++def _string_list(value: Any) -> List[str]:
++    """Return a list of non-empty strings, or [] when the value is not a list."""
++    if isinstance(value, list):
++        return [str(v).strip() for v in value if str(v).strip()]
++    return []
++
++
+ def _build_skin_config(data: Dict[str, Any]) -> SkinConfig:
+     """Build a SkinConfig from a raw dict (built-in or loaded from YAML)."""
+     # Start with default values as base for missing keys
+@@ -855,6 +863,7 @@ def _build_skin_config(data: Dict[str, Any]) -> SkinConfig:
+         tool_emojis=emoji_overrides,
+         banner_logo=data.get("banner_logo", ""),
+         banner_hero=data.get("banner_hero", ""),
++        banner_hero_frames=_string_list(data.get("banner_hero_frames")),
+     )
+ 
+ 
+diff --git a/tui_gateway/server.py b/tui_gateway/server.py
+index d1b58dd18..afd3d87b6 100644
+--- a/tui_gateway/server.py
++++ b/tui_gateway/server.py
+@@ -3377,6 +3377,7 @@ def resolve_skin() -> dict:
+             "branding": skin.branding,
+             "banner_logo": skin.banner_logo,
+             "banner_hero": skin.banner_hero,
++            "banner_hero_frames": list(getattr(skin, "banner_hero_frames", [])),
+             "tool_prefix": skin.tool_prefix,
+             "help_header": (skin.branding or {}).get("help_header", ""),
+         }
+diff --git a/ui-tui/src/app/createGatewayEventHandler.ts b/ui-tui/src/app/createGatewayEventHandler.ts
+index 0161de8e9..c24dc1063 100644
+--- a/ui-tui/src/app/createGatewayEventHandler.ts
++++ b/ui-tui/src/app/createGatewayEventHandler.ts
+@@ -64,6 +64,7 @@ const themeForSkin = (s: GatewaySkin) => {
+     s.branding ?? {},
+     s.banner_logo ?? '',
+     s.banner_hero ?? '',
++    Array.isArray(s.banner_hero_frames) ? s.banner_hero_frames : [],
+     s.tool_prefix ?? '',
+     s.help_header ?? ''
+   )
+diff --git a/ui-tui/src/banner.ts b/ui-tui/src/banner.ts
+index 748e5a452..725e7b03a 100644
+--- a/ui-tui/src/banner.ts
++++ b/ui-tui/src/banner.ts
+@@ -2,47 +2,59 @@ import type { ThemeColors } from './theme.js'
+ 
+ const RICH_RE = /\[(?:bold\s+)?(?:dim\s+)?(#(?:[0-9a-fA-F]{3,8}))\]([\s\S]*?)(\[\/\])/g
+ 
++/**
++ * A physical row of colored text. One `Line` = one rendered row; the segments
++ * are the `[color]…[/]` runs that make it up, rendered side-by-side left→right.
++ * A single-color row is one segment; a two-tone row (e.g. cat + box) is two.
++ */
++type Segment = [color: string, text: string]
++export type Line = Segment[]
++
+ export function parseRichMarkup(markup: string): Line[] {
+-  const lines: Line[] = []
++  const rows: Line[] = []
+ 
+   for (const raw of markup.split('\n')) {
+     const trimmed = raw.trimEnd()
+ 
+     if (!trimmed) {
+-      lines.push(['', ' '])
+-
++      rows.push([['', ' ']])
+       continue
+     }
+ 
+     const matches = [...trimmed.matchAll(RICH_RE)]
+ 
+     if (!matches.length) {
+-      lines.push(['', trimmed])
+-
++      rows.push([['', trimmed]])
+       continue
+     }
+ 
++    const row: Line = []
+     let cursor = 0
+ 
+     for (const m of matches) {
+       const before = trimmed.slice(cursor, m.index)
+ 
+       if (before) {
+-        lines.push(['', before])
++        row.push(['', before])
+       }
+ 
+-      lines.push([m[1]!, m[2]!])
++      row.push([m[1]!, m[2]!])
+       cursor = m.index! + m[0].length
+     }
+ 
+     if (cursor < trimmed.length) {
+-      lines.push(['', trimmed.slice(cursor)])
++      row.push(['', trimmed.slice(cursor)])
+     }
++
++    rows.push(row)
+   }
+ 
+-  return lines
++  return rows
+ }
+ 
++/** Parse each frame (a full hero markup string) into its own `Line[]`. */
++const parseFrames = (frames: string[]): Line[][] => frames.map(f => parseRichMarkup(f))
++
+ const LOGO_ART = [
+   '██╗  ██╗███████╗██████╗ ███╗   ███╗███████╗███████╗       █████╗  ██████╗ ███████╗███╗   ██╗████████╗',
+   '██║  ██║██╔════╝██╔══██╗████╗ ████║██╔════╝██╔════╝      ██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝',
+@@ -76,7 +88,7 @@ const CADUC_GRADIENT = [2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 3] as const
+ const colorize = (art: string[], gradient: readonly number[], c: ThemeColors): Line[] => {
+   const p = [c.primary, c.accent, c.border, c.muted]
+ 
+-  return art.map((text, i) => [p[gradient[i]!] ?? c.muted, text])
++  return art.map((text, i) => [[p[gradient[i]!] ?? c.muted, text]] as Line)
+ }
+ 
+ export const LOGO_WIDTH = Math.max(...LOGO_ART.map(line => line.length))
+@@ -88,6 +100,11 @@ export const logo = (c: ThemeColors, customLogo?: string): Line[] =>
+ export const caduceus = (c: ThemeColors, customHero?: string): Line[] =>
+   customHero ? parseRichMarkup(customHero) : colorize(CADUCEUS_ART, CADUC_GRADIENT, c)
+ 
+-export const artWidth = (lines: Line[]) => lines.reduce((m, [, t]) => Math.max(m, t.length), 0)
++export const caduceusFrames = (c: ThemeColors, frames?: string[]): Line[][] => {
++  if (!frames || !frames.length) return [caduceus(c)]
++  return parseFrames(frames)
++}
+ 
+-type Line = [string, string]
++/** Width of the widest row, where each row's width is the SUM of its segments. */
++export const artWidth = (lines: Line[]) =>
++  lines.reduce((m, row) => Math.max(m, row.reduce((w, [, t]) => w + t.length, 0)), 0)
+diff --git a/ui-tui/src/components/branding.tsx b/ui-tui/src/components/branding.tsx
+index 18fdf3332..8892bb068 100644
+--- a/ui-tui/src/components/branding.tsx
++++ b/ui-tui/src/components/branding.tsx
+@@ -2,7 +2,7 @@ import { Box, Text, useStdout } from '@hermes/ink'
+ import { useEffect, useState } from 'react'
+ import unicodeSpinners from 'unicode-animations'
+ 
+-import { artWidth, caduceus, CADUCEUS_WIDTH, logo, LOGO_WIDTH } from '../banner.js'
++import { artWidth, caduceusFrames, CADUCEUS_WIDTH, logo, LOGO_WIDTH, type Line } from '../banner.js'
+ import { mix } from '../lib/color.js'
+ import { flat } from '../lib/text.js'
+ import type { Theme } from '../theme.js'
+@@ -32,7 +32,7 @@ function InlineLoader({ label, t }: { label: string; t: Theme }) {
+   )
+ }
+ 
+-export function ArtLines({ lines }: { lines: [string, string][] }) {
++export function ArtLines({ lines }: { lines: Line[] }) {
+   // No `opaque`: the banner is top-level content with nothing behind it, so
+   // it never needs the opaque space-fill (that's for absolute overlays). On a
+   // transparent terminal (terminal.background #00000000) the fill's "default
+@@ -40,15 +40,36 @@ export function ArtLines({ lines }: { lines: [string, string][] }) {
+   // see-through — the reported ugly banner. Glyphs paint fine on their own.
+   return (
+     <Box flexDirection="column" height={lines.length} width={artWidth(lines)}>
+-      {lines.map(([c, text], i) => (
+-        <Text color={c} key={i} wrap="truncate-end">
+-          {text}
+-        </Text>
++      {lines.map((row, i) => (
++        <Box key={i} flexDirection="row">
++          {row.map(([c, text], j) => (
++            <Text key={j} color={c} wrap="truncate-end">
++              {text}
++            </Text>
++          ))}
++        </Box>
+       ))}
+     </Box>
+   )
+ }
+ 
++const HERO_TICK_MS = 240
++
++/** Cycles hero frames when a skin provides >1; otherwise static. */
++function AnimatedHero({ t }: { t: Theme }) {
++  const frames = caduceusFrames(t.color, t.bannerHeroFrames)
++  const [idx, setIdx] = useState(0)
++
++  useEffect(() => {
++    if (frames.length <= 1) return
++    const id = setInterval(() => setIdx(i => (i + 1) % frames.length), HERO_TICK_MS)
++    return () => clearInterval(id)
++  }, [frames.length])
++
++  const lines = frames.length > 1 ? frames[idx] ?? frames[0]! : frames[0]!
++  return <ArtLines lines={lines} />
++}
++
+ // Responsive Banner: full art → compact rule → text → hidden.
+ //
+ // Terminals can't scale glyphs, so "responsive" means picking a layout that
+@@ -212,8 +233,10 @@ const TOOLSETS_MAX = 8
+ export function SessionPanel({ info, maxWidth, sid, t }: SessionPanelProps) {
+   const term = useStdout().stdout?.columns ?? 100
+   const cols = Math.max(20, Math.min(term, maxWidth ?? term))
+-  const heroLines = caduceus(t.color, t.bannerHero || undefined)
+-  const leftW = Math.min((artWidth(heroLines) || CADUCEUS_WIDTH) + 4, Math.floor(cols * 0.4))
++  const heroFrames = caduceusFrames(t.color, t.bannerHeroFrames)
++  // Width from the widest frame so the layout doesn't jump mid-animation.
++  const heroW = heroFrames.reduce((m, f) => Math.max(m, artWidth(f)), 0)
++  const leftW = Math.min((heroW || CADUCEUS_WIDTH) + 4, Math.floor(cols * 0.4))
+   const wide = cols >= 90 && leftW + 40 < cols
+   const w = Math.max(20, wide ? cols - leftW - 14 : cols - 12)
+   const lineBudget = Math.max(12, w - 2)
+@@ -350,7 +373,7 @@ export function SessionPanel({ info, maxWidth, sid, t }: SessionPanelProps) {
+   // hand-rolled widths exactly: usable = (leftW + 2 + w) - gap = leftW + w.
+   const heroColumn = wide ? (
+     <Box flexDirection="column" width="100%">
+-      <ArtLines lines={heroLines} />
++      <AnimatedHero t={t} />
+       <Text />
+ 
+       <Text color={t.color.accent}>
+diff --git a/ui-tui/src/theme.ts b/ui-tui/src/theme.ts
+index 11ef94131..c75c543c9 100644
+--- a/ui-tui/src/theme.ts
++++ b/ui-tui/src/theme.ts
+@@ -64,6 +64,7 @@ export interface Theme {
+   brand: ThemeBrand
+   bannerLogo: string
+   bannerHero: string
++  bannerHeroFrames: string[]
+ }
+ 
+ // ── Color math ───────────────────────────────────────────────────────
+@@ -419,14 +420,16 @@ export const DARK_THEME: Theme = {
+   color: buildPalette(DARK_SEEDS, false),
+   brand: BRAND,
+   bannerLogo: '',
+-  bannerHero: ''
++  bannerHero: '',
++  bannerHeroFrames: []
+ }
+ 
+ export const LIGHT_THEME: Theme = {
+   color: buildPalette(LIGHT_SEEDS, true),
+   brand: BRAND,
+   bannerLogo: '',
+-  bannerHero: ''
++  bannerHero: '',
++  bannerHeroFrames: []
+ }
+ 
+ // ── Background-aware readability adaptation ─────────────────────────
+@@ -840,6 +843,7 @@ export function fromSkin(
+   branding: SkinBranding,
+   bannerLogo = '',
+   bannerHero = '',
++  bannerHeroFrames: string[] = [],
+   toolPrefix = '',
+   helpHeader = ''
+ ): Theme {
+@@ -961,7 +965,8 @@ export function fromSkin(
+       },
+ 
+       bannerLogo,
+-      bannerHero
++      bannerHero,
++      bannerHeroFrames
+     },
+     process.env,
+     isLight
