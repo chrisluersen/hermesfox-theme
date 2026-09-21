@@ -91,14 +91,3 @@ banner_hero: |
   [#3bdbfb]  |  | (   |  $TOKENS   | /[/]
   [#45e3f2]  )  |  \  `.___________|/[/]
   [#57eae8]  `--'   `--'[/]
-
-# banner_logo is a TOP-LEVEL skin key too — replaces the big "HERMES AGENT"
-# pixel header in CLI + TUI. Swan (left) + "LUCKY TO HAVE AGENCY" block-font
-# (right) inline. TUI caveat: ONE color tag per row (parseRichMarkup splits each
-# tag into its own line — two tags = two stacked rows). Per-row carbonfox gradient.
-banner_logo: |
-  [#78a9ff]                                                                                                           __..--''``---....___   _..._    __[/]
-  [#33b1ff]   __   __  _________ ____  __   _      ______________ __   ___  __________  _________  __       /// //_.-'    .-/";  `        ``<._  ``.''_ `. / // /[/]
-  [#3ddbd9]  / /  / / / / ___/ //_/\ \/ /  | | /| / /  _/_  __/ // /  / _ |/ ___/ __/ |/ / ___/\ \/ /     ///_.-' _..--.'_    \                    `( ) ) // //[/]
-  [#be95ff] / /__/ /_/ / /__/ ,<    \  /   | |/ |/ // /  / / / _  /  / __ / (_ / _//    / /__   \  /       / (_..-' // (< _     ;_..__               ; `' / ///[/]
-  [#78a9ff]/____/\____/\___/_/|_|   /_/    |__/|__/___/ /_/ /_//_/  /_/ |_\___/___/_/|_/\___/   /_/         / // // //  `-._,_)' // / ``--...____..-' /// / //[/]

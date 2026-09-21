@@ -42,9 +42,12 @@ These are the sources of the banner art embedded in `hermes/skins/*.yaml`:
   `\[` as an escaped bracket and the CLI prints a literal `[/]`.
 - Render: `token-cat-preview.png`.
 
-> **`banner_logo` note:** the swan + "LUCKY TO HAVE AGENCY" block-font is archived here
-> as `swan-chris-pick.txt` and is still embedded in `hermes/skins/*.yaml` in this repo.
-> The live Hermes skin currently carries the hero only.
+> **`banner_logo` note (2026-09-20):** the swan + "LUCKY TO HAVE AGENCY" block-font is
+> **archived here** as `swan-chris-pick.txt` and is **no longer embedded in the skins** —
+> it was taken out of the top banner at the owner's request. The art is kept for reuse:
+> re-embedding it means adding a `banner_logo: |` block to `hermes/skins/*.yaml` (like
+> `banner_hero`, the key is read **top-level**, not under `branding:`), one `[color]…[/]`
+> tag per row.
 
 ## Sources
 - **asciiart.eu** — canonical archive, ranked by views. JS-rendered; use web extraction.
