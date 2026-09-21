@@ -90,3 +90,18 @@ each file to its live location (paths in the zellij layouts and nvim use a
 MIT. Palette adapted from EdenEast/nightfox.nvim (MIT). ASCII art is sourced
 from the public ASCII-art archives (asciiart.eu, jgs classics) and the
 in-house cat-in-box/braille heroes; see `ascii-art/README.md` for provenance.
+
+## Art archive
+
+Two art directories, on purpose — they are not duplicates in intent:
+
+- **`ascii-art/`** — the curated index of pieces the skins actually embed
+  (`token-cat-29x11.txt` is the live `banner_hero`, `swan-chris-pick.txt` the
+  `banner_logo`). Canonical for anything a skin references.
+- **`banner-art/`** — the raw design archive: every candidate, contact sheet,
+  rotation frame and generator script from the banner work, with `README.md`
+  recording what won and why. `galaxy-*` and `plasma-*` are superseded
+  explorations, kept for history.
+
+Both carry copies of the two active pieces; **`ascii-art/` is canonical** if they
+ever disagree.
