@@ -37,8 +37,7 @@ Machine-readable tokens: [`palette.json`](palette.json).
 
 | Path | What it is |
 |---|---|
-| `hermes/skins/carbonfox.yaml` | **Canonical Hermes skin** — colors, `banner_hero` (cat-in-box), `banner_logo` (swan + block text). Live copy: `$HERMES_HOME/skins/carbonfox.yaml`. |
-| `hermes/skins/carbonfox-hermes.yaml` | Portable duplicate of the skin (the old gist's copy). |
+| `hermes/skins/carbonfox.yaml` | **The one skin** — carbonfox colors and the `banner_hero` (token-cat, one gradient stop per row). The swan/block-font `banner_logo` art is archived in `ascii-art/swan-chris-pick.txt` and is **not** embedded. Live copy: `$HERMES_HOME/skins/carbonfox.yaml`. |
 | `wezterm/wezterm.lua` | WezTerm main config — font, `color_scheme = 'carbonfox'`, 170×45, spawns zellij. |
 | `wezterm/wezterm-{hermes,notes,gitdiffs}.lua` | WezTerm layout variants (per Start-Menu shortcut). |
 | `windows-terminal/settings.json` | Full Windows Terminal config (font + profiles + Carbon Fox scheme). |
