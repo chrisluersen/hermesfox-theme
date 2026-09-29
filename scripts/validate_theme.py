@@ -42,7 +42,14 @@ SEMANTIC_MAPPINGS = tuple(
     }.items()
 )
 
-USER_MARKERS = (r"C:\Users\chris", "C:/Users/chris", "<USER>")
+# Portable-path check: match ANY local user path (<drive>:\Users\<name>,
+# /Users/<name>, /home/<name>) instead of hardcoding one machine's username,
+# plus the unsubstituted <USER> placeholder.
+USER_PATH_RE = re.compile(
+    r"(?:[A-Za-z]:)?[\\/]{1,2}[Uu]sers[\\/]{1,2}[^\\/\s\"']+"
+    r"|/(?:home|root)/[^/\s\"']+"
+)
+PLACEHOLDER_MARKERS = ("<USER>",)
 JSON_FILES = ("palette.json", "vscode/carbonfox.vscode-theme.json", "vscode/vscode-color-customizations.json", "windows-terminal/scheme.json")
 JSONC_FILES = ("vscode/settings.json",)
 
@@ -161,9 +168,13 @@ def validate_repository(root: Path) -> list[str]:
             text = path.read_text(encoding="utf-8")
         except (UnicodeDecodeError, OSError):
             continue
-        for marker in USER_MARKERS:
+        for marker in PLACEHOLDER_MARKERS:
             if marker in text:
                 violations.append(f"{path.relative_to(root)}: contains non-portable marker {marker}")
+        for match in USER_PATH_RE.finditer(text):
+            violations.append(
+                f"{path.relative_to(root)}: contains non-portable marker {match.group(0)}"
+            )
     return violations
 
 

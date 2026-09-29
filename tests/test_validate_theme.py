@@ -52,10 +52,10 @@ class ThemeValidationTests(unittest.TestCase):
                 'name: carbonfox\ncolors: {}\nbranding: {}\nbanner_logo: " "\nbanner_hero: "hero"\n',
                 encoding="utf-8",
             )
-            (root / "palette.json").write_text("{\"path\": \"C:\\\\Users\\\\chris\"}", encoding="utf-8")
-            (root / "README.md").write_text("C:\\Users\\chris", encoding="utf-8")
+            (root / "palette.json").write_text("{\"path\": \"C:\\\\Users\\\\example\"}", encoding="utf-8")
+            (root / "README.md").write_text("C:\\Users\\example", encoding="utf-8")
             violations = validate_repository(root)
-            self.assertTrue(any("C:\\Users\\chris" in item for item in violations))
+            self.assertTrue(any("C:\\Users\\example" in item for item in violations))
 
     def test_jsonc_settings_are_parsed(self):
         violations = validate_repository(ROOT)
