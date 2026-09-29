@@ -3,6 +3,20 @@
 Thumbs.db
 *.log
 
-# No font binaries are vendored — install via fonts/install-hack-nerd-font.sh
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+
+# Temporary/backup files
+*.tmp
+*.bak
+
+# No font binaries are vendored
 *.ttf
 *.otf

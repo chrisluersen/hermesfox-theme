@@ -51,6 +51,10 @@ colors:
 branding:
   agent_name: "Hermes Agent"
 
+# Intentionally blank: a single space suppresses the built-in HERMES AGENT
+# fallback while keeping the Hermesfox logo artwork archived, not embedded.
+banner_logo: " "
+
 # banner_hero is a TOP-LEVEL skin key (skin_engine.py:857 reads data["banner_hero"],
 # NOT branding.banner_hero). Replaces HERMES_CADUCEUS in CLI + TUI.
 # Hero art: "token-cat" (Hayley Jane Wakenshaw / Flump, asciiart.eu 8c5113000921d06a,
