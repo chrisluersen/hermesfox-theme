@@ -1,37 +1,28 @@
 {
   "name": "carbonfox",
-  "description": "EdenEast Nightfox Carbonfox palette adapted for Hermes and common developer tools.",
-  "colors": {
+  "description": "Portable Carbonfox base tokens and explicit application mappings.",
+  "base": {
     "background": "#161616",
-    "backgroundAlt": "#0d0d0d",
+    "background_alt": "#0d0d0d",
     "surface": "#282828",
-    "surfaceSelected": "#525253",
+    "surface_selected": "#2a2a2a",
     "foreground": "#f2f4f8",
-    "foregroundAlt": "#dfdfe0",
-    "muted": "#97999b",
+    "foreground_alt": "#dfdfe0",
+    "muted": "#7f8489",
     "border": "#525253",
     "blue": "#78a9ff",
     "cyan": "#33b1ff",
+    "cyan_bright": "#3ddbd9",
     "green": "#25be6a",
-    "cyanBright": "#3ddbd9",
     "purple": "#be95ff",
     "red": "#ee5396",
+    "orange": "#ff9e64",
+    "critical": "#ff5f5f",
     "teal": "#08bdba"
   },
-  "semantics": {
-    "accent": "#78a9ff",
-    "tool": "#33b1ff",
-    "thinking": "#be95ff",
-    "success": "#25be6a",
-    "warning": "#08bdba",
-    "error": "#ee5396",
-    "syntaxString": "#25be6a",
-    "syntaxNumber": "#3ddbd9",
-    "syntaxKeyword": "#be95ff",
-    "syntaxComment": "#97999b",
-    "diffAddedForeground": "#25be6a",
-    "diffRemovedForeground": "#ee5396",
-    "diffAddedBackground": "#161616",
-    "diffRemovedBackground": "#161616"
+  "mappings": {
+    "hermes": {
+      "background": "background", "banner_border": "blue", "banner_title": "foreground", "banner_accent": "blue", "banner_dim": "muted", "banner_text": "foreground", "ui_accent": "blue", "ui_label": "cyan", "ui_ok": "green", "ui_error": "red", "ui_warn": "orange", "ui_tool": "cyan", "ui_thinking": "purple", "diff_added": "background", "diff_removed": "background", "diff_added_word": "green", "diff_removed_word": "red", "syntax_string": "cyan", "syntax_number": "purple", "syntax_keyword": "blue", "syntax_comment": "muted", "prompt": "foreground", "input_rule": "blue", "response_border": "blue", "status_bar_bg": "background", "status_bar_text": "foreground_alt", "status_bar_strong": "foreground", "status_bar_dim": "muted", "status_bar_good": "green", "status_bar_warn": "orange", "status_bar_bad": "red", "status_bar_critical": "critical", "session_label": "blue", "session_border": "muted", "voice_status_bg": "background", "selection_bg": "surface_selected", "completion_menu_bg": "background", "completion_menu_current_bg": "surface_selected", "completion_menu_meta_bg": "background", "completion_menu_meta_current_bg": "surface_selected"
+    }
   }
 }
