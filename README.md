@@ -1,106 +1,83 @@
 # hermesfox-theme
 
-A cross-application **Carbonfox** theme for the whole terminal stack — Hermes
-Agent, WezTerm, Windows Terminal, zellij, nvim, and VS Code — plus the banner
-ASCII-art archive and the font setup.
+A small, portable Carbonfox theme for Hermes and companion applications. The
+canonical Hermes artifact is `hermes/skins/carbonfox.yaml`; `palette.json` is
+the cross-application color reference. The palette originates from
+[EdenEast/nightfox.nvim](https://github.com/EdenEast/nightfox.nvim), licensed
+under MIT.
 
-The palette originates from [EdenEast/nightfox.nvim]
-(`lua/nightfox/palette/carbonfox.lua`). This repo is the canonical, portable
-home for that palette applied end to end.
+## What is shipped
 
-> **2026-08-22:** this repo replaces the previous Carbonfox gist
-> (`16349ada05bdf04399aa328fd0231184`), which was folded in and retired.
+- `hermes/skins/carbonfox.yaml` — canonical Hermes skin. `banner_hero` is the
+  active token-cat artwork. `banner_logo: " "` is a stock-Hermes compatibility
+  workaround that suppresses the classic CLI fallback on supported versions;
+  it is not a guaranteed cross-renderer hide API. Restart the TUI after
+  startup-art changes; palette changes may repaint live.
+- `windows-terminal/scheme.json` — a mergeable scheme object.
+- `vscode/carbonfox.vscode-theme.json` and
+  `vscode/vscode-color-customizations.json` — portable VS Code exports.
+- `ascii-art/` — canonical artwork sources; the swan/block lettering is
+  archived and not embedded.
+- `fonts/install-hack-nerd-font.sh` — optional per-user font installer.
 
-## Palette
+Artwork rights are documented in [`NOTICE.md`](NOTICE.md). The active token-cat
+entry is retained pending direct permission or a license that clearly permits
+redistribution; that is a release blocker, not an implied grant.
 
-| Role | Hex |
-|---|---|
-| Background | `#161616` |
-| Background alt | `#0d0d0d` |
-| Surface | `#282828` |
-| Surface selected | `#525253` |
-| Foreground | `#f2f4f8` |
-| Foreground alt | `#dfdfe0` |
-| Muted / comment | `#97999b` |
-| Blue | `#78a9ff` |
-| Cyan | `#33b1ff` |
-| Teal / cyan-bright | `#3ddbd9` |
-| Green | `#25be6a` |
-| Purple | `#be95ff` |
-| Red / pink-red | `#ee5396` |
-| Warm orange (warning) | `#ff9e64` |
-| Yellow / teal | `#08bdba` |
+## Safe installation
 
-Machine-readable tokens: [`palette.json`](palette.json).
+Back up target files before merging and copy only the artifact needed.
 
-## Layout
-
-| Path | What it is |
-|---|---|
-| `hermes/skins/carbonfox.yaml` | **The one skin** — carbonfox colors and the `banner_hero` (token-cat, one gradient stop per row). The swan/block-font `banner_logo` art is archived in `ascii-art/swan-chris-pick.txt` and is **not** embedded. Live copy: `$HERMES_HOME/skins/carbonfox.yaml`. |
-| `wezterm/wezterm.lua` | WezTerm main config — font, `color_scheme = 'carbonfox'`, 170×45, spawns zellij. |
-| `wezterm/wezterm-{hermes,notes,gitdiffs}.lua` | WezTerm layout variants (per Start-Menu shortcut). |
-| `windows-terminal/settings.json` | Full Windows Terminal config (font + profiles + Carbon Fox scheme). |
-| `windows-terminal/scheme.json` | Portable Carbon Fox scheme object (for pasting into any terminal). |
-| `zellij/config.kdl` | zellij config with the embedded `carbonfox` theme block + `theme "carbonfox"`. |
-| `zellij/layouts/*.kdl` | zellij layouts (dev / hermes / notes / gitdiffs). |
-| `nvim/init.lua` | nvim config — `nightfox.nvim` → `colorscheme("carbonfox")`. |
-| `vscode/settings.json` | VS Code settings (font family `Hack Nerd Font Mono`). |
-| `vscode/carbonfox.vscode-theme.json` | Standalone VS Code color theme file. |
-| `vscode/vscode-color-customizations.json` | VS Code `workbench.colorCustomizations` snippet. |
-| `ascii-art/` | Banner ASCII art archive (swan, love-birds, goose, cat-in-box, …) + budget notes. |
-| `fonts/install-hack-nerd-font.sh` | Per-user install of Hack Nerd Font Mono from the Nerd Fonts release. |
-
-## Font
-
-The stack uses **Hack Nerd Font Mono** (size 10). The font is not vendored
-here — it's ~32MB of TTFs. Install it with:
+### Hermes
 
 ```bash
-bash fonts/install-hack-nerd-font.sh
+export HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
+mkdir -p "$HERMES_HOME/skins"
+curl -fsSL https://raw.githubusercontent.com/chrisluersen/hermesfox-theme/master/hermes/skins/carbonfox.yaml -o "$HERMES_HOME/skins/carbonfox.yaml"
+hermes config set display.skin carbonfox
+hermes config get display.skin
+hermes skin list
 ```
 
-This downloads `Hack.zip` from the official Nerd Fonts GitHub release, installs
-the TTFs per-user (no admin), and registers the font in the registry.
+On Windows Git Bash, use the profile's actual Hermes home if it differs from
+`$HOME/.hermes`. Verify the downloaded file before activating it; do not
+replace a complete profile or configuration directory.
 
-## Install / point configs at this repo
+### Companion applications
 
-The configs here are working copies. To restore them on a fresh machine, copy
-each file to its live location (paths in the zellij layouts and nvim use a
-`<USER>` placeholder — replace it with your Windows username):
+- **Windows Terminal:** back up `settings.json`, then merge
+  `windows-terminal/scheme.json` into the existing `schemes` array. Do not
+  replace the complete settings file or change a profile assignment implicitly.
+- **VS Code:** back up User Settings, then merge
+  `vscode/vscode-color-customizations.json`, or package the standalone theme in
+  an extension. Do not replace complete User Settings.
+- WezTerm, Zellij, and Neovim configurations are not shipped; keep personal
+  workstation configuration separate.
 
-| Repo file | Live location |
+The optional font script targets Nerd Fonts `v3.5.1`, verifies the pinned
+SHA-256 before extraction, installs only Mono TTFs, and reports registry errors.
+Tests use temporary archives and a fake `reg` command; they never touch real
+fonts or the Windows registry. It is not required for palette installation.
+
+## Support boundary
+
+| Surface | Status |
 |---|---|
-| `hermes/skins/carbonfox.yaml` | `%LOCALAPPDATA%/hermes/skins/carbonfox.yaml` |
-| `wezterm/*.lua` | `~/.config/wezterm/` |
-| `windows-terminal/settings.json` | `%LOCALAPPDATA%/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json` |
-| `zellij/config.kdl`, `zellij/layouts/*.kdl` | `%APPDATA%/Zellij/config/` |
-| `nvim/init.lua` | `%LOCALAPPDATA%/nvim/init.lua` |
-| `vscode/settings.json` | `%APPDATA%/Code/User/settings.json` |
+| Hermes skin / classic CLI | Supported when the installed Hermes accepts this skin schema; verify with `hermes skin list` |
+| Hermes TUI startup art | Supported with the workaround; restart after startup-art changes |
+| Windows Terminal scheme | Portable object; merge into existing settings |
+| VS Code exports | Merge or package; never replace User Settings |
+| WezTerm, Zellij, Neovim | Not shipped; outside support scope |
+| Windows / Git Bash | Commands assume `curl`, `mkdir`, and Hermes; adapt the Hermes home path |
 
-> **Portable paths:** WezTerm and VS Code configs derive paths from env vars
-> (`os.getenv('LOCALAPPDATA')`, `${userHome}`), so they work on any machine.
-> The zellij layouts and nvim carry a `<USER>` placeholder in launcher paths —
-> swap it for your username. The plugin paths in `zellij/config.kdl` point at
-> the user data dir; re-point them to your `%APPDATA%/Zellij/data/plugins/`.
+## Migration
 
-## License
+The retired Carbonfox gist
+[`16349ada05bdf04399aa328fd0231184`](https://gist.github.com/16349ada05bdf04399aa328fd0231184)
+is superseded by this repository. Install the canonical skin here instead.
 
-MIT. Palette adapted from EdenEast/nightfox.nvim (MIT). ASCII art is sourced
-from the public ASCII-art archives (asciiart.eu, jgs classics) and the
-in-house cat-in-box/braille heroes; see `ascii-art/README.md` for provenance.
+## License and provenance
 
-## Art archive
-
-Two art directories, on purpose — they are not duplicates in intent:
-
-- **`ascii-art/`** — the curated index of pieces the skins actually embed
-  (`token-cat-29x11.txt` is the live `banner_hero`, `swan-chris-pick.txt` the
-  `banner_logo`). Canonical for anything a skin references.
-- **`banner-art/`** — the raw design archive: every candidate, contact sheet,
-  rotation frame and generator script from the banner work, with `README.md`
-  recording what won and why. `galaxy-*` and `plasma-*` are superseded
-  explorations, kept for history.
-
-Both carry copies of the two active pieces; **`ascii-art/` is canonical** if they
-ever disagree.
+Theme files are MIT-licensed unless a bundled source says otherwise. See
+[`NOTICE.md`](NOTICE.md) for the per-artifact rights record. No font binaries
+are vendored.
