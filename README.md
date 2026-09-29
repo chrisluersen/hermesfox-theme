@@ -20,9 +20,9 @@ under MIT.
   archived and not embedded.
 - `fonts/install-hack-nerd-font.sh` — optional per-user font installer.
 
-Artwork rights are documented in [`NOTICE.md`](NOTICE.md). The active token-cat
-entry is retained pending direct permission or a license that clearly permits
-redistribution; that is a release blocker, not an implied grant.
+Artwork rights and attribution are documented in [`NOTICE.md`](NOTICE.md). The
+repository owner states that verbal permission was granted to use and modify
+the active token-cat artwork.
 
 ## Safe installation
 
