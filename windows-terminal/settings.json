@@ -62,6 +62,14 @@
                 "source": "Windows.Terminal.PowershellCore"
             },
             {
+                "commandline": "C:\\Users\\chris\\.bun\\bin\\bun.exe repl",
+                "guid": "{EDBC0C03-B07E-45B7-A3A8-49DCDADEAFA5}",
+                "hidden": false,
+                "icon": "C:\\Users\\chris\\.bun\\bin\\bun.exe",
+                "name": "Bun",
+                "startingDirectory": "%USERPROFILE%"
+            },
+            {
                 "commandline": "C:\\Program Files\\Git\\bin\\bash.exe",
                 "guid": "{00000000-0000-0000-0000-000000000003}",
                 "hidden": false,
