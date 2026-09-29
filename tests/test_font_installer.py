@@ -72,6 +72,32 @@ class FontInstallerTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("no HackNerdFontMono", result.stderr)
 
+    def test_requires_font_dir_or_localappdata(self):
+        temp, root, archive, font_dir, bin_dir = self.make_fixture({"HackNerdFontMono-Regular.ttf": "mono"})
+        with temp:
+            env = os.environ.copy()
+            env.pop("FONT_DIR", None)
+            env.pop("LOCALAPPDATA", None)
+            env.update(
+                PATH=f"{bin_dir}{os.pathsep}{env['PATH']}",
+                HACK_NERD_FONT_ZIP=str(archive),
+                HACK_NERD_FONT_SHA256=hashlib.sha256(archive.read_bytes()).hexdigest(),
+                HACK_NERD_FONT_VERSION="test",
+            )
+            bash = shutil.which("bash") or "C:/Program Files/Git/usr/bin/bash.exe"
+            result = subprocess.run([bash, str(INSTALLER)], cwd=ROOT, env=env, text=True, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("FONT_DIR or LOCALAPPDATA must be set", result.stderr)
+
+    def test_registry_failure_is_reported_after_copy(self):
+        temp, root, archive, font_dir, bin_dir = self.make_fixture({"HackNerdFontMono-Regular.ttf": "mono"})
+        with temp:
+            (bin_dir / "reg").write_text("#!/bin/sh\nexit 9\n", encoding="utf-8")
+            result = self.run_installer(archive, font_dir, bin_dir)
+            self.assertEqual(result.returncode, 9)
+            self.assertIn("registry: failed", result.stderr)
+            self.assertTrue((font_dir / "HackNerdFontMono-Regular.ttf").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

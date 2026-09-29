@@ -7,7 +7,13 @@ EXPECTED_SHA256="${HACK_NERD_FONT_SHA256:-fa24da7de7cefe7766614d27762570b20453c8
 DOWNLOAD_DIR="${TMPDIR:-${TEMP:-.}}"
 ZIP="${HACK_NERD_FONT_ZIP:-$DOWNLOAD_DIR/hack-nerd-font-$RELEASE_TAG.zip}"
 STAGING=""
-FONT_DIR="${FONT_DIR:-$LOCALAPPDATA/Microsoft/Windows/Fonts}"
+if [ -z "${FONT_DIR:-}" ]; then
+  if [ -z "${LOCALAPPDATA:-}" ]; then
+    echo "FONT_DIR or LOCALAPPDATA must be set" >&2
+    exit 1
+  fi
+  FONT_DIR="$LOCALAPPDATA/Microsoft/Windows/Fonts"
+fi
 
 cleanup() {
   [ -n "$STAGING" ] && rm -rf "$STAGING"

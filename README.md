@@ -56,6 +56,8 @@ replace a complete profile or configuration directory.
 
 The optional font script targets Nerd Fonts `v3.5.1`, verifies the pinned
 SHA-256 before extraction, installs only Mono TTFs, and reports registry errors.
+If registry registration fails, the copied font files remain in the per-user
+font directory and can be removed manually before retrying.
 Tests use temporary archives and a fake `reg` command; they never touch real
 fonts or the Windows registry. It is not required for palette installation.
 
