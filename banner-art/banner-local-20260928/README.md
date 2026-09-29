@@ -39,6 +39,6 @@ same-session registry update; display preferences are out of scope by decision (
 ## Provenance
 
 - Earlier form of the same work: `hermes-patches-archive/retired/banner-local-20260925/banner-local.patch`.
-- The 7-file bundle that still carried them: hermes-config `5b2ceead`.
+- The 7-file bundle that still carried them: hermes-home `5b2ceead`.
 - Related, separate, and **stale**: `banner-art/animated-hero-redo-bundle/upstream-diff-7-files.patch`
   (2026-08-14; does not apply — see `hermes-patches-archive/FIXES-REGISTRY.md` §5).
