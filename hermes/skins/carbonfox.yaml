@@ -2,50 +2,61 @@ name: carbonfox
 description: "Eden carbonfox — matches WezTerm + zellij + nvim carbonfox. Palette from EdenEast/nightfox.nvim lua/nightfox/palette/carbonfox.lua."
 
 # Carbonfox palette (EdenEast/nightfox carbonfox.lua):
-#   bg #161616  fg #f2f4f8  bg1 #2a2a2a  blue #78a9ff  cyan #33b1ff
-#   green #25be6a  purple #be95ff  red #ee5396  orange #3ddbd9
-#   dim #dfdfe0  comment #7f8489
+#   bg #161616  bg0 #0d0d0d  sel0 #2a2a2a  sel1 #525253  fg #f2f4f8  fg2 #dfdfe0
+#   comment #7f8489  blue #78a9ff  cyan #33b1ff  teal #3ddbd9  green #25be6a
+#   purple #be95ff  red #ee5396   (+ #ff9e64 warm warn: carbonfox has no orange)
+#
+# Colour roles (one job per hue, so blue stops meaning everything):
+#   blue   = Hermes chrome: panel frame, section headers, response frame, session
+#   cyan   = labels/keys          teal = tool calls (the cat's feet colour)
+#   purple = reasoning, dimmed 70% toward bg so it never outshines the answer
+#   gray   = passive chrome: input rule, borders, separators
+# Surfaces follow nvim: status line on bg0, popup on sel0, popup selection sel1.
+# Syntax + diff follow nightfox's spec (string green, keyword magenta, number
+# "orange"=teal; diff rows are 15% hue blends over bg), so code in Hermes looks
+# like code in nvim.
 colors:
-  background: "#161616"              # App/base surface
-  banner_border: "#78a9ff"           # Panel border (carbonfox blue)
-  banner_title: "#f2f4f8"            # Panel title (carbonfox fg)
+  background: "#161616"              # App/base surface (bg1)
+  banner_border: "#78a9ff"           # Panel/overlay frame (blue)
+  banner_title: "#f2f4f8"            # Titles (fg)
   banner_accent: "#78a9ff"           # Section headers (blue)
-  banner_dim: "#7f8489"              # Dim/muted text (carbonfox comment)
-  banner_text: "#f2f4f8"             # Body text
-  ui_accent: "#78a9ff"               # General UI accent (blue)
-  ui_label: "#33b1ff"                # UI labels (light-blue)
+  banner_dim: "#7f8489"              # Muted text (comment)
+  banner_text: "#f2f4f8"             # Body text (fg)
+  ui_accent: "#78a9ff"               # General accent (blue)
+  ui_label: "#33b1ff"                # Labels/keys (cyan)
   ui_ok: "#25be6a"                   # Success (green)
   ui_error: "#ee5396"                # Error (red)
   ui_warn: "#ff9e64"                 # Warning (warm orange)
-  ui_tool: "#33b1ff"                 # Tool-call markers (cyan)
-  ui_thinking: "#be95ff"             # Reasoning/thinking text (purple)
-  diff_added: "#161616"              # Diff added-line background
-  diff_removed: "#161616"            # Diff removed-line background
+  ui_tool: "#3ddbd9"                 # Tool-call markers (teal, distinct from blue/cyan)
+  ui_thinking: "#8c6fb9"             # Reasoning text (purple 70% over bg, 4.4:1)
+  shell_dollar: "#25be6a"            # `$` shell marker (else inherits default skin)
+  diff_added: "#182f23"              # Diff added-row bg (green 15% over bg)
+  diff_removed: "#361f29"            # Diff removed-row bg (red 15% over bg)
   diff_added_word: "#25be6a"         # Diff added word fg (green)
   diff_removed_word: "#ee5396"       # Diff removed word fg (red)
-  syntax_string: "#33b1ff"           # Code strings (cyan)
-  syntax_number: "#be95ff"           # Code numbers (purple)
-  syntax_keyword: "#78a9ff"          # Code keywords (blue)
-  syntax_comment: "#7f8489"          # Code comments (carbonfox comment)
-  prompt: "#f2f4f8"                  # Prompt text color
-  input_rule: "#78a9ff"              # Input area horizontal rule (blue)
-  response_border: "#78a9ff"         # Response box border (blue)
-  status_bar_bg: "#161616"           # Status bar background
-  status_bar_text: "#dfdfe0"         # Status bar default text
-  status_bar_strong: "#f2f4f8"       # Status bar highlighted text
-  status_bar_dim: "#7f8489"          # Status bar separators/muted text
-  status_bar_good: "#25be6a"         # Healthy context usage (green)
-  status_bar_warn: "#ff9e64"         # Warning context usage (orange)
-  status_bar_bad: "#ee5396"          # High context usage (red)
-  status_bar_critical: "#ff5f5f"     # Critical context usage
-  session_label: "#78a9ff"           # Session label color (blue)
-  session_border: "#7f8489"          # Session ID dim color
-  voice_status_bg: "#161616"         # TUI voice status background
-  selection_bg: "#2a2a2a"            # TUI mouse-selection highlight background
-  completion_menu_bg: "#161616"      # Completion menu background
-  completion_menu_current_bg: "#2a2a2a"   # Active completion row background
-  completion_menu_meta_bg: "#161616"       # Completion meta column background
-  completion_menu_meta_current_bg: "#2a2a2a"  # Active completion meta background
+  syntax_string: "#25be6a"           # Strings (nightfox: green)
+  syntax_number: "#3ddbd9"           # Numbers (nightfox: orange.base = teal)
+  syntax_keyword: "#be95ff"          # Keywords (nightfox: magenta)
+  syntax_comment: "#7f8489"          # Comments (comment)
+  prompt: "#78a9ff"                  # Prompt symbol (blue; typed text keeps terminal fg)
+  input_rule: "#525253"              # Input rule (sel1 gray - passive chrome)
+  response_border: "#78a9ff"         # Response frame (blue)
+  status_bar_bg: "#0d0d0d"           # Status bar (bg0, like nvim statusline)
+  status_bar_text: "#dfdfe0"         # Status text (fg2)
+  status_bar_strong: "#f2f4f8"       # Status highlight (fg)
+  status_bar_dim: "#7f8489"          # Status separators (comment)
+  status_bar_good: "#25be6a"         # Context OK (green)
+  status_bar_warn: "#ff9e64"         # Context warning (orange)
+  status_bar_bad: "#ee5396"          # Context high (red)
+  status_bar_critical: "#ff5f5f"     # Context critical (hot red)
+  session_label: "#78a9ff"           # Session label (blue)
+  session_border: "#7f8489"          # Session ID (comment)
+  voice_status_bg: "#0d0d0d"         # Voice status (matches status bar)
+  selection_bg: "#2a2a2a"            # Mouse selection (sel0, like nvim Visual)
+  completion_menu_bg: "#2a2a2a"      # Popup (sel0, like nvim Pmenu)
+  completion_menu_current_bg: "#525253"   # Popup selection (sel1, like PmenuSel)
+  completion_menu_meta_bg: "#2a2a2a"      # Popup meta column
+  completion_menu_meta_current_bg: "#525253"  # Popup meta selection
 
 # Branding — keep agent identity, tune nothing for theme.
 branding:
