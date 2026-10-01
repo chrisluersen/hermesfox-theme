@@ -66,34 +66,17 @@ branding:
 # fallback while keeping the Hermesfox logo artwork archived, not embedded.
 banner_logo: " "
 
-# banner_hero is a TOP-LEVEL skin key (skin_engine.py:857 reads data["banner_hero"],
-# NOT branding.banner_hero). Replaces HERMES_CADUCEUS in CLI + TUI.
-# Hero art: "token-cat" (Hayley Jane Wakenshaw / Flump, asciiart.eu 8c5113000921d06a,
-# 29x11, artist initials removed). REGION MAP IS OWNER-WORDED - do NOT re-derive it
-# from the glyphs (two wrong guesses and two contradictory vision reads on 2026-09-20):
-#   "the very bottom straight line is still the box, the cat is also the triangle at
-#    the end of the curve as well as the other marks following the curve above the
-#    square"
-# So: the BOX+LID is the right structure - front face, the bottom straight line
-# (r10 c12-23), the walls (cols 24-28), the lid flaps (cols 22-28, rows 1-4), and
-# the top edge `,-'` at r8 c12-14, which sits level with the cat's arm.
-# The TORSO IS THE CAT: rows 5-7 hold the cat's own outline (`,`, `,'-`----Y`, `;`),
-# so they are purple - he corrected this explicitly ("the cat belly ... is blue
-# right now"). Per-row cut: {1:22, 2:22, 3:22, 4:22, 5:26, 6:26, 7:24, 8:12, 9:14,
-# 10:11}. Everything else is the CAT: left silhouette, head, back, torso, inner
-# line. Row 11 is the feet band. Refined over five owner corrections on 2026-09-20 -
-# treat the owner's feature words ("the lid", "the top edge", "the belly", "the
-# arm") as the spec, not the glyphs.
-# Colour, owner's call 2026-09-20: a hue gradient, violet -> teal, one stop per
-# row (#be95ff family on top settling to #3ddbd9 at the feet). Interpolated in
-# OKLab with a LIGHTNESS ramp on top of the hue sweep - the first attempt was
-# hue-only at constant L and read as banding, not shading.
-# MANDATORY, not cosmetic: a row whose art ends in a backslash must end `\ [/]` -
-# one trailing space inside the tag. Rich reads `\[` as an escaped bracket, so
-# `...\[/]` prints a literal `[/]` in the CLI (verified: rows 1 and 2 leaked it).
-# The trailing space is invisible in both renderers and is what keeps CLI clean.
-# Revert = git checkout skins/carbonfox.yaml (per-element map history:
-# banner-art/README.md).
+# banner_hero is a top-level skin key; it replaces the caduceus in CLI + TUI.
+# Art: "token-cat" by Hayley Jane Wakenshaw (Flump), 29x11, initials replaced
+# by the $TOKENS label (decorative; Hermes does not substitute it). See NOTICE.md.
+# Active colouring: one OKLab stop per row, violet -> teal, with a lightness
+# ramp so it reads as shading rather than banding.
+# Two-tone variant (cat purple->pink, box blue->teal) is ready in
+# ascii-art/token-cat-two-tone.rich.txt. It renders in the classic CLI but the
+# stock TUI splits multi-colour rows into separate lines until upstream fixes
+# parseRichMarkup (NousResearch/hermes-agent#129481 / #46773); swap it in then.
+# Rich gotcha: a row ending in a backslash must end `\ [/]` (space before the
+# tag), or `\[` is read as an escaped bracket and a literal `[/]` leaks.
 banner_hero: |
   [#ab7bf0]  ,-.       _,---._ __  / \ [/]
   [#9e88fd] /  )    .-'       `./ /   \ [/]

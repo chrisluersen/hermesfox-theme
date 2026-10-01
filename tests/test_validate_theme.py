@@ -70,6 +70,13 @@ class ThemeValidationTests(unittest.TestCase):
             violations = validate_repository(root)
             self.assertTrue(any(v.startswith("skin/palette drift: ui_tool") for v in violations))
 
+    def test_two_tone_hero_matches_token_cat_source(self):
+        import re
+        hero = (ROOT / "ascii-art/token-cat-two-tone.rich.txt").read_text(encoding="utf-8")
+        plain = [re.sub(r"\[[^]]*\]", "", row).rstrip() for row in hero.splitlines()]
+        source = (ROOT / "ascii-art/token-cat-29x11.txt").read_text(encoding="utf-8").splitlines()
+        self.assertEqual(plain, [row.replace("hjw", "$TOKENS").rstrip() for row in source])
+
     def test_jsonc_settings_are_parsed(self):
         violations = validate_repository(ROOT)
         self.assertNotIn("vscode/settings.json: invalid JSON/JSONC", violations)
