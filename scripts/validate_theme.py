@@ -18,27 +18,20 @@ CANONICAL_COLOR_KEYS = (
     "status_bar_warn", "status_bar_bad", "status_bar_critical", "session_label",
     "session_border", "voice_status_bg", "selection_bg", "completion_menu_bg",
     "completion_menu_current_bg", "completion_menu_meta_bg",
-    "completion_menu_meta_current_bg",
+    "completion_menu_meta_current_bg", "shell_dollar",
 )
 
-# The palette file is the single source of truth for the Hermes mapping contract.
+# Pinned semantic roles: the few mappings that define the theme's colour
+# grammar. Everything else is checked against palette.json's own mapping, which
+# is the single source of truth for the rest of the contract.
 SEMANTIC_MAPPINGS = tuple(
     {"skin": skin, "palette": palette}
     for skin, palette in {
-        "background": "background", "banner_border": "blue", "banner_title": "foreground",
-        "banner_accent": "blue", "banner_dim": "muted", "banner_text": "foreground",
-        "ui_accent": "blue", "ui_label": "cyan", "ui_ok": "green", "ui_error": "red",
-        "ui_warn": "orange", "ui_tool": "cyan", "ui_thinking": "purple",
-        "diff_added": "background", "diff_removed": "background", "diff_added_word": "green",
-        "diff_removed_word": "red", "syntax_string": "cyan", "syntax_number": "purple",
-        "syntax_keyword": "blue", "syntax_comment": "muted", "prompt": "foreground",
-        "input_rule": "blue", "response_border": "blue", "status_bar_bg": "background",
-        "status_bar_text": "foreground_alt", "status_bar_strong": "foreground",
-        "status_bar_dim": "muted", "status_bar_good": "green", "status_bar_warn": "orange",
-        "status_bar_bad": "red", "status_bar_critical": "red", "session_label": "blue",
-        "session_border": "muted", "voice_status_bg": "background", "selection_bg": "surface_selected",
-        "completion_menu_bg": "background", "completion_menu_current_bg": "surface_selected",
-        "completion_menu_meta_bg": "background", "completion_menu_meta_current_bg": "surface_selected",
+        "background": "background", "banner_text": "foreground", "banner_dim": "muted",
+        "ui_accent": "blue", "ui_label": "cyan", "ui_tool": "cyan_bright",
+        "ui_ok": "green", "ui_error": "red", "ui_warn": "orange",
+        "syntax_string": "green", "syntax_keyword": "purple", "syntax_comment": "muted",
+        "input_rule": "border", "status_bar_bg": "background_alt",
     }.items()
 )
 
@@ -144,11 +137,13 @@ def validate_repository(root: Path) -> list[str]:
     if set(palette_hermes) != set(CANONICAL_COLOR_KEYS):
         violations.append("palette Hermes mapping must cover every canonical skin color")
     for mapping in SEMANTIC_MAPPINGS:
-        token = palette_hermes.get(mapping["skin"])
+        if palette_hermes.get(mapping["skin"]) != mapping["palette"]:
+            violations.append(f"semantic role changed: {mapping['skin']} -> {mapping['palette']}")
+    for key, token in palette_hermes.items():
         if token not in palette_base:
-            violations.append(f"palette missing mapped base token: {mapping['skin']} -> {token}")
-        elif mapping["skin"] in colors and colors[mapping["skin"]] != palette_base[token]:
-            violations.append(f"semantic mapping drift: {mapping['skin']} != {token}")
+            violations.append(f"palette missing mapped base token: {key} -> {token}")
+        elif key in colors and colors[key].lower() != palette_base[token].lower():
+            violations.append(f"skin/palette drift: {key} {colors[key]} != {token} {palette_base[token]}")
     for name in JSON_FILES:
         path = root / name
         if path.exists():

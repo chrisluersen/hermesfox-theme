@@ -80,6 +80,7 @@ is superseded by this repository. Install the canonical skin here instead.
 
 ## License and provenance
 
-Theme files are MIT-licensed unless a bundled source says otherwise. See
-[`NOTICE.md`](NOTICE.md) for the per-artifact rights record. No font binaries
-are vendored.
+This repository does not grant a blanket license for its original material.
+The upstream Carbonfox palette is MIT-licensed; the token-cat artwork is
+included under the owner's stated verbal permission. See [`NOTICE.md`](NOTICE.md)
+for per-artifact provenance and rights. No font binaries are vendored.

@@ -6,6 +6,7 @@ as explicit archive material:
 | File | Role | Provenance |
 |---|---|---|
 | `token-cat-29x11.txt` | Active `banner_hero` | Hayley Jane Wakenshaw (Flump), ASCII Art Archive entry `8c5113000921d06a`; repository owner states verbal permission was granted — see `NOTICE.md` |
+| `token-cat-two-tone.rich.txt` | Ready `banner_hero` variant: cat purple→pink, box blue→teal; enable once the TUI keeps multi-colour rows intact | Same token-cat artwork |
 | `swan-banner-logo.txt` | Archived `banner_logo` artwork | Retained as owner artwork; not embedded in the skin |
 
 The active token-cat source is preserved because it is the current appearance;

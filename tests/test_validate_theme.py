@@ -33,7 +33,8 @@ class ThemeValidationTests(unittest.TestCase):
         self.assertIn("mappings", palette)
         self.assertIn("hermes", palette["mappings"])
         self.assertEqual(palette["mappings"]["hermes"]["ui_warn"], "orange")
-        self.assertEqual(palette["mappings"]["hermes"]["syntax_string"], "cyan")
+        self.assertEqual(palette["mappings"]["hermes"]["syntax_string"], "green")
+        self.assertEqual(palette["mappings"]["hermes"]["ui_tool"], "cyan_bright")
         self.assertEqual(
             set(palette["mappings"]["hermes"]),
             set(CANONICAL_COLOR_KEYS),
@@ -56,6 +57,25 @@ class ThemeValidationTests(unittest.TestCase):
             (root / "README.md").write_text("C:\\Users\\example", encoding="utf-8")
             violations = validate_repository(root)
             self.assertTrue(any("C:\\Users\\example" in item for item in violations))
+
+    def test_skin_palette_drift_is_detected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "hermes/skins").mkdir(parents=True)
+            skin = (ROOT / "hermes/skins/carbonfox.yaml").read_text(encoding="utf-8")
+            (root / "hermes/skins/carbonfox.yaml").write_text(
+                skin.replace('ui_tool: "#3ddbd9"', 'ui_tool: "#000000"'), encoding="utf-8")
+            (root / "palette.json").write_text(
+                (ROOT / "palette.json").read_text(encoding="utf-8"), encoding="utf-8")
+            violations = validate_repository(root)
+            self.assertTrue(any(v.startswith("skin/palette drift: ui_tool") for v in violations))
+
+    def test_two_tone_hero_matches_token_cat_source(self):
+        import re
+        hero = (ROOT / "ascii-art/token-cat-two-tone.rich.txt").read_text(encoding="utf-8")
+        plain = [re.sub(r"\[[^]]*\]", "", row).rstrip() for row in hero.splitlines()]
+        source = (ROOT / "ascii-art/token-cat-29x11.txt").read_text(encoding="utf-8").splitlines()
+        self.assertEqual(plain, [row.replace("hjw", "$TOKENS").rstrip() for row in source])
 
     def test_jsonc_settings_are_parsed(self):
         violations = validate_repository(ROOT)
