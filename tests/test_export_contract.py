@@ -110,3 +110,10 @@ class ExportContractTests(unittest.TestCase):
             root, "palettes/tokencat.json", lambda data: data["base"].update(blue=12)
         ))
         self.assertTrue(any("base tokens must be hex strings" in item for item in errors))
+
+    def test_duplicate_dashboard_yaml_key_is_rejected(self):
+        def mutate(root):
+            path = root / "hermes/dashboard-themes/tokencat.yaml"
+            path.write_text(path.read_text(encoding="utf-8") + "\nname: duplicate\n", encoding="utf-8")
+        errors = self._errors_after(mutate)
+        self.assertTrue(any("duplicate key: name" in item for item in errors))

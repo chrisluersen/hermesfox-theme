@@ -298,6 +298,30 @@
       "/editor.tokenColorCustomizations/keywords": "purple",
       "/editor.tokenColorCustomizations/types": "blue",
       "/editor.tokenColorCustomizations/functions": "cyan"
+    },
+    "hermes/dashboard-themes/tokencat.yaml": {
+      "/palette/background/hex": "background",
+      "/palette/midground/hex": "foreground",
+      "/palette/foreground/hex": "blue",
+      "/colorOverrides/card": "surface",
+      "/colorOverrides/cardForeground": "foreground",
+      "/colorOverrides/popover": "surface",
+      "/colorOverrides/popoverForeground": "foreground",
+      "/colorOverrides/primary": "blue",
+      "/colorOverrides/primaryForeground": "background",
+      "/colorOverrides/secondary": "surface",
+      "/colorOverrides/secondaryForeground": "foreground",
+      "/colorOverrides/muted": "surface",
+      "/colorOverrides/mutedForeground": "muted_accessible",
+      "/colorOverrides/accent": "surface_selected",
+      "/colorOverrides/accentForeground": "foreground",
+      "/colorOverrides/destructive": "red",
+      "/colorOverrides/destructiveForeground": "background",
+      "/colorOverrides/success": "green",
+      "/colorOverrides/warning": "orange",
+      "/colorOverrides/border": "border",
+      "/colorOverrides/input": "border",
+      "/colorOverrides/ring": "blue"
     }
   }
 }

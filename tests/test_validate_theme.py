@@ -79,6 +79,9 @@ class ThemeValidationTests(unittest.TestCase):
         source = (ROOT / "ascii-art/token-cat-29x11.txt").read_text(encoding="utf-8").splitlines()
         self.assertEqual(plain, [row.replace("hjw", "$TOKENS").rstrip() for row in source])
 
+    def test_repository_has_no_validation_violations(self):
+        self.assertEqual(validate_repository(ROOT), [])
+
 
 
 if __name__ == "__main__":

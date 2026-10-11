@@ -97,6 +97,31 @@ class ThemeRegressionTests(unittest.TestCase):
                 self.assertIn(key, skin["colors"])
                 self.assertIn(key, palette["mappings"]["hermes"])
 
+    def test_dashboard_has_explicit_color_and_safe_layout_contract(self):
+        from scripts.theme_io import strict_yaml
+        self.assertTrue((ROOT / "hermes/dashboard-themes/tokencat.yaml").is_file())
+        data = strict_yaml((ROOT / "hermes/dashboard-themes/tokencat.yaml").read_text(encoding="utf-8"))
+        self.assertEqual(data["name"], "tokencat")
+        self.assertEqual(data["palette"]["background"]["hex"], "#161616")
+        self.assertEqual(data["palette"]["midground"]["hex"], "#f2f4f8")
+        self.assertEqual(data["palette"]["background"]["alpha"], 1.0)
+        self.assertEqual(data["palette"]["midground"]["alpha"], 1.0)
+        self.assertEqual(data["palette"]["foreground"], {"hex": "#78a9ff", "alpha": 0.0})
+        self.assertEqual(data["layout"], {"radius": "0.5rem", "density": "comfortable"})
+        self.assertEqual(data["layoutVariant"], "standard")
+        self.assertEqual(data["palette"]["warmGlow"], "rgba(0, 0, 0, 0)")
+        self.assertEqual(data["palette"]["noiseOpacity"], 0.0)
+        required = {
+            "card", "cardForeground", "popover", "popoverForeground", "primary",
+            "primaryForeground", "secondary", "secondaryForeground", "muted",
+            "mutedForeground", "accent", "accentForeground", "destructive",
+            "destructiveForeground", "success", "warning", "border", "input", "ring",
+        }
+        self.assertEqual(set(data["colorOverrides"]), required)
+        self.assertNotIn("fontUrl", data["typography"])
+        self.assertNotIn("customCSS", data)
+        self.assertNotIn("assets", data)
+
 
 def contrast_ratio(first, second):
     def luminance(value):

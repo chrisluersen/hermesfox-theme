@@ -98,20 +98,7 @@ def check_palette_shape(data):
         raise ValueError("Hermes mappings must reference named tokens")
     return data
 
-REQUIRED_FILES = (
-    "palette.json",
-    "hermes/skins/carbonfox.yaml",
-    "windows-terminal/scheme.json",
-    "vscode/carbonfox.vscode-theme.json",
-    "vscode/vscode-color-customizations.json",
-    "palettes/tokencat.json",
-    "hermes/skins/tokencat.yaml",
-    "ascii-art/token-cat-29x11.txt",
-    "ascii-art/token-cat-two-tone.rich.txt",
-    "windows-terminal/tokencat.scheme.json",
-    "vscode/tokencat.vscode-theme.json",
-    "vscode/tokencat-color-customizations.json",
-)
+REQUIRED_FILES = ('palette.json', 'hermes/skins/carbonfox.yaml', 'windows-terminal/scheme.json', 'vscode/carbonfox.vscode-theme.json', 'vscode/vscode-color-customizations.json', 'palettes/tokencat.json', 'hermes/skins/tokencat.yaml', 'ascii-art/token-cat-29x11.txt', 'ascii-art/token-cat-two-tone.rich.txt', 'windows-terminal/tokencat.scheme.json', 'vscode/tokencat.vscode-theme.json', 'vscode/tokencat-color-customizations.json', 'hermes/dashboard-themes/tokencat.yaml')
 
 def validate_repository(root: Path) -> list[str]:
     violations: list[str] = []
