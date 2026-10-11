@@ -47,7 +47,7 @@ USER_PATH_RE = re.compile(
     r"|/(?:home|root)/[^/\s\"']+"
 )
 PLACEHOLDER_MARKERS = ("<USER>",)
-JSON_FILES = ("palettes/tokencat.json", "vscode/tokencat.vscode-theme.json", "vscode/tokencat-color-customizations.json", "windows-terminal/tokencat.scheme.json")
+JSON_FILES = ('palettes/tokencat.json', 'vscode/tokencat.vscode-theme.json', 'vscode/tokencat-color-customizations.json', 'windows-terminal/tokencat.scheme.json', 'palette.json', 'windows-terminal/scheme.json', 'vscode/carbonfox.vscode-theme.json', 'vscode/vscode-color-customizations.json')
 
 
 
@@ -107,8 +107,26 @@ def check_palette_shape(data):
         raise ValueError("Hermes mappings must reference named tokens")
     return data
 
+REQUIRED_FILES = (
+    "palette.json",
+    "hermes/skins/carbonfox.yaml",
+    "windows-terminal/scheme.json",
+    "vscode/carbonfox.vscode-theme.json",
+    "vscode/vscode-color-customizations.json",
+    "palettes/tokencat.json",
+    "hermes/skins/tokencat.yaml",
+    "ascii-art/token-cat-29x11.txt",
+    "ascii-art/token-cat-two-tone.rich.txt",
+    "windows-terminal/tokencat.scheme.json",
+    "vscode/tokencat.vscode-theme.json",
+    "vscode/tokencat-color-customizations.json",
+)
+
 def validate_repository(root: Path) -> list[str]:
     violations: list[str] = []
+    for relative in REQUIRED_FILES:
+        if not (root / relative).is_file():
+            violations.append(f"missing required artifact: {relative}")
     skin_path = root / "hermes/skins/tokencat.yaml"
     palette_path = root / "palettes/tokencat.json"
     try:
@@ -122,6 +140,8 @@ def validate_repository(root: Path) -> list[str]:
     except (OSError, ValueError) as exc:
         violations.append(f"palettes/tokencat.json: invalid JSON ({exc})")
         palette = {}
+    if not isinstance(skin.get("banner_hero"), str) or not skin["banner_hero"].strip():
+        violations.append("skin missing required banner_hero")
     colors = skin.get("colors", {}) if isinstance(skin, dict) else {}
     for key in CANONICAL_COLOR_KEYS:
         if key not in colors:

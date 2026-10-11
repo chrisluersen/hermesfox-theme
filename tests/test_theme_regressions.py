@@ -62,3 +62,29 @@ class ThemeRegressionTests(unittest.TestCase):
                 (self.root / "palettes/tokencat.json").write_text(json.dumps(value), encoding="utf-8")
                 self.assertTrue(validate_repository(self.root))
 
+    def test_missing_source_art_is_rejected(self):
+        (self.root / "ascii-art/token-cat-29x11.txt").unlink()
+        self.assertIn(
+            "missing required artifact: ascii-art/token-cat-29x11.txt",
+            validate_repository(self.root),
+        )
+
+    def test_missing_json_export_is_rejected(self):
+        (self.root / "windows-terminal/tokencat.scheme.json").unlink()
+        self.assertIn(
+            "missing required artifact: windows-terminal/tokencat.scheme.json",
+            validate_repository(self.root),
+        )
+
+    def test_missing_hero_is_rejected(self):
+        path = self.root / "hermes/skins/tokencat.yaml"
+        path.write_text(path.read_text(encoding="utf-8").split("banner_hero: |", 1)[0], encoding="utf-8")
+        self.assertIn("skin missing required banner_hero", validate_repository(self.root))
+
+    def test_private_plan_is_not_a_distributable(self):
+        before = validate_repository(self.root)
+        path = self.root / ".hermes/plans/private.md"
+        path.parent.mkdir(parents=True)
+        path.write_text("/home/example/private", encoding="utf-8")
+        self.assertEqual(validate_repository(self.root), before)
+
