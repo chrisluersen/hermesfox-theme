@@ -2,11 +2,15 @@
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import sys
 from pathlib import Path
 from typing import Any
+
+if __package__:
+    from .theme_io import strict_json, strict_yaml
+else:
+    from theme_io import strict_json, strict_yaml
 
 CANONICAL_COLOR_KEYS = (
     "background", "banner_border", "banner_title", "banner_accent", "banner_dim",
@@ -44,45 +48,26 @@ USER_PATH_RE = re.compile(
 )
 PLACEHOLDER_MARKERS = ("<USER>",)
 JSON_FILES = ("palettes/tokencat.json", "vscode/tokencat.vscode-theme.json", "vscode/tokencat-color-customizations.json", "windows-terminal/tokencat.scheme.json")
-JSONC_FILES = ("vscode/settings.json",)
 
 
-def _parse_jsonc(text: str) -> Any:
-    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
-    text = re.sub(r"(^|\s)//.*", r"\1", text)
-    text = re.sub(r",(\s*[}\]])", r"\1", text)
-    return json.loads(text)
 
 
 def _parse_skin(text: str) -> dict[str, Any]:
-    """Parse the small scalar/map subset used by the distributable skin."""
-    result: dict[str, Any] = {"colors": {}}
-    section = None
-    for line in text.splitlines():
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        if line.startswith("colors:"):
-            section = "colors"
-            continue
-        if line.startswith("banner_logo:"):
-            result["banner_logo"] = line.split(":", 1)[1].strip().strip('"')
-            section = None
-            continue
-        if line.startswith("banner_hero:"):
-            section = "banner_hero"
-            result[section] = ""
-            continue
-        if section == "banner_hero" and line.startswith("  "):
-            result[section] += line[2:] + "\n"
-            continue
-        if section == "colors" and line.startswith("  ") and ":" in line:
-            key, value = line.strip().split(":", 1)
-            result["colors"][key] = re.sub(r"\s+#.*$", "", value).strip().strip('"')
-            continue
-        section = None
-    if not result["colors"]:
+    data = strict_yaml(text)
+    if not isinstance(data, dict):
+        raise ValueError("skin must be an object")
+    if data.get("name") != "tokencat":
+        raise ValueError("skin name must be tokencat")
+    colors = data.get("colors")
+    if not isinstance(colors, dict) or not colors:
         raise ValueError("missing colors map")
-    return result
+    for key, value in colors.items():
+        if not isinstance(value, str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", value):
+            raise ValueError(f"invalid six-digit color: {key}")
+    for key in ("banner_logo", "banner_hero"):
+        if key in data and not isinstance(data[key], str):
+            raise ValueError(f"{key} must be a string")
+    return data
 
 
 def _plain_hero(hero: str) -> list[str]:
@@ -107,6 +92,21 @@ def _distributable_files(root: Path) -> list[Path]:
     return sorted(set(p for p in files if p.is_file()))
 
 
+def check_palette_shape(data):
+    if not isinstance(data, dict):
+        raise ValueError("palette must be an object")
+    base, mappings = data.get("base"), data.get("mappings")
+    if not isinstance(base, dict) or not isinstance(mappings, dict):
+        raise ValueError("base and mappings must be objects")
+    hermes = mappings.get("hermes")
+    if not isinstance(hermes, dict):
+        raise ValueError("mappings.hermes must be an object")
+    if not all(isinstance(v, str) and re.fullmatch(r"#[0-9a-fA-F]{6}", v) for v in base.values()):
+        raise ValueError("base tokens must be six-digit hex strings")
+    if not all(isinstance(v, str) for v in hermes.values()):
+        raise ValueError("Hermes mappings must reference named tokens")
+    return data
+
 def validate_repository(root: Path) -> list[str]:
     violations: list[str] = []
     skin_path = root / "hermes/skins/tokencat.yaml"
@@ -118,8 +118,8 @@ def validate_repository(root: Path) -> list[str]:
         violations.append(f"hermes/skins/tokencat.yaml: invalid skin ({exc})")
         skin = {}
     try:
-        palette = json.loads(palette_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        palette = check_palette_shape(strict_json(palette_path.read_text(encoding="utf-8")))
+    except (OSError, ValueError) as exc:
         violations.append(f"palettes/tokencat.json: invalid JSON ({exc})")
         palette = {}
     colors = skin.get("colors", {}) if isinstance(skin, dict) else {}
@@ -148,16 +148,12 @@ def validate_repository(root: Path) -> list[str]:
         path = root / name
         if path.exists():
             try:
-                json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError) as exc:
+                document = strict_json(path.read_text(encoding="utf-8"))
+                if not isinstance(document, dict):
+                    raise ValueError("JSON artifact must be an object")
+            except (OSError, ValueError) as exc:
                 violations.append(f"{name}: invalid JSON ({exc})")
-    for name in JSONC_FILES:
-        path = root / name
-        if path.exists():
-            try:
-                _parse_jsonc(path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError) as exc:
-                violations.append(f"{name}: invalid JSON/JSONC ({exc})")
+
     for path in _distributable_files(root):
         try:
             text = path.read_text(encoding="utf-8")

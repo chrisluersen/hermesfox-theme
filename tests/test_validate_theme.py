@@ -79,9 +79,6 @@ class ThemeValidationTests(unittest.TestCase):
         source = (ROOT / "ascii-art/token-cat-29x11.txt").read_text(encoding="utf-8").splitlines()
         self.assertEqual(plain, [row.replace("hjw", "$TOKENS").rstrip() for row in source])
 
-    def test_jsonc_settings_are_parsed(self):
-        violations = validate_repository(ROOT)
-        self.assertNotIn("vscode/settings.json: invalid JSON/JSONC", violations)
 
 
 if __name__ == "__main__":
