@@ -89,7 +89,9 @@
   "derived_from": {
     "legacy_revision": "793dcd583c873a7512c6d2a5222d4d0b697f704c",
     "lualine_source": "https://github.com/EdenEast/nightfox.nvim/blob/4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a/lua/lualine/themes/carbonfox.lua",
-    "lualine_adapter": "https://github.com/EdenEast/nightfox.nvim/blob/4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a/lua/nightfox/util/lualine.lua"
+    "lualine_adapter": "https://github.com/EdenEast/nightfox.nvim/blob/4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a/lua/nightfox/util/lualine.lua",
+    "palette_source": "https://github.com/EdenEast/nightfox.nvim/blob/4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a/lua/nightfox/palette/carbonfox.lua",
+    "license_source": "https://github.com/EdenEast/nightfox.nvim/blob/4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a/LICENSE"
   },
   "exports": {
     "windows-terminal/tokencat.scheme.json": {

@@ -1,5 +1,5 @@
 name: tokencat
-description: "Eden carbonfox — matches WezTerm + zellij + nvim carbonfox. Palette from EdenEast/nightfox.nvim lua/nightfox/palette/carbonfox.lua."
+description: Tokencat - a Carbonfox-derived dark theme with explicit readability overrides
 
 # Carbonfox palette (EdenEast/nightfox carbonfox.lua):
 #   bg #161616  bg0 #0d0d0d  sel0 #2a2a2a  sel1 #525253  fg #f2f4f8  fg2 #dfdfe0
