@@ -98,13 +98,13 @@ def _source_hero(root: Path) -> list[str] | None:
 
 
 def _distributable_files(root: Path) -> list[Path]:
-    """Discover shipped text assets; archives and generated artwork are excluded by location."""
-    excluded = {".git", ".venv", "__pycache__", "banner-art", "tests", "scripts"}
-    files = []
-    for path in root.rglob("*"):
-        if path.is_file() and not any(part in excluded for part in path.relative_to(root).parts):
-            files.append(path)
-    return files
+    files = list(root.glob("*.md"))
+    files.append(root / "palette.json")
+    for directory in ("palettes", "hermes", "ascii-art", "fonts", "vscode", "windows-terminal", "licenses", "docs"):
+        base = root / directory
+        if base.is_dir():
+            files.extend(p for p in base.rglob("*") if p.is_file())
+    return sorted(set(p for p in files if p.is_file()))
 
 
 def validate_repository(root: Path) -> list[str]:
