@@ -131,3 +131,9 @@ class ContrastTests(unittest.TestCase):
     def test_focus_accent_clears_nontext_contrast(self):
         base = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))["base"]
         self.assertGreaterEqual(contrast_ratio(base["blue"], base["surface"]), 3.0)
+
+    def test_diff_word_backgrounds_keep_text_readable(self):
+        base = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))["base"]
+        for token in ("diff_add_word_bg", "diff_remove_word_bg"):
+            with self.subTest(token=token):
+                self.assertGreaterEqual(contrast_ratio(base["foreground"], base[token]), 4.5)

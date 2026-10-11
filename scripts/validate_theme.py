@@ -8,8 +8,10 @@ from pathlib import Path
 from typing import Any
 
 if __package__:
+    from .export_contract import validate_exports
     from .theme_io import strict_json, strict_yaml
 else:
+    from export_contract import validate_exports
     from theme_io import strict_json, strict_yaml
 
 CANONICAL_COLOR_KEYS = ('background', 'banner_border', 'banner_title', 'banner_accent', 'banner_dim', 'banner_text', 'ui_accent', 'ui_label', 'ui_ok', 'ui_error', 'ui_warn', 'ui_tool', 'ui_thinking', 'diff_added', 'diff_removed', 'diff_added_word', 'diff_removed_word', 'syntax_string', 'syntax_number', 'syntax_keyword', 'syntax_comment', 'prompt', 'input_rule', 'response_border', 'status_bar_bg', 'status_bar_text', 'status_bar_strong', 'status_bar_dim', 'status_bar_good', 'status_bar_warn', 'status_bar_bad', 'status_bar_critical', 'session_label', 'session_border', 'voice_status_bg', 'selection_bg', 'completion_menu_bg', 'completion_menu_current_bg', 'completion_menu_meta_bg', 'completion_menu_meta_current_bg', 'shell_dollar', 'ui_primary', 'ui_text', 'ui_border')
@@ -175,6 +177,7 @@ def validate_repository(root: Path) -> list[str]:
             violations.append(
                 f"{path.relative_to(root)}: contains non-portable marker {match.group(0)}"
             )
+    violations.extend(validate_exports(root))
     return violations
 
 
