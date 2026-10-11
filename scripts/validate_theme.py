@@ -22,7 +22,7 @@ CANONICAL_COLOR_KEYS = (
 )
 
 # Pinned semantic roles: the few mappings that define the theme's colour
-# grammar. Everything else is checked against palette.json's own mapping, which
+# grammar. Everything else is checked against palettes/tokencat.json's own mapping, which
 # is the single source of truth for the rest of the contract.
 SEMANTIC_MAPPINGS = tuple(
     {"skin": skin, "palette": palette}
@@ -43,7 +43,7 @@ USER_PATH_RE = re.compile(
     r"|/(?:home|root)/[^/\s\"']+"
 )
 PLACEHOLDER_MARKERS = ("<USER>",)
-JSON_FILES = ("palette.json", "vscode/carbonfox.vscode-theme.json", "vscode/vscode-color-customizations.json", "windows-terminal/scheme.json")
+JSON_FILES = ("palettes/tokencat.json", "vscode/tokencat.vscode-theme.json", "vscode/tokencat-color-customizations.json", "windows-terminal/tokencat.scheme.json")
 JSONC_FILES = ("vscode/settings.json",)
 
 
@@ -109,18 +109,18 @@ def _distributable_files(root: Path) -> list[Path]:
 
 def validate_repository(root: Path) -> list[str]:
     violations: list[str] = []
-    skin_path = root / "hermes/skins/carbonfox.yaml"
-    palette_path = root / "palette.json"
+    skin_path = root / "hermes/skins/tokencat.yaml"
+    palette_path = root / "palettes/tokencat.json"
     try:
         skin_text = skin_path.read_text(encoding="utf-8")
         skin = _parse_skin(skin_text)
     except (OSError, ValueError) as exc:
-        violations.append(f"hermes/skins/carbonfox.yaml: invalid skin ({exc})")
+        violations.append(f"hermes/skins/tokencat.yaml: invalid skin ({exc})")
         skin = {}
     try:
         palette = json.loads(palette_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        violations.append(f"palette.json: invalid JSON ({exc})")
+        violations.append(f"palettes/tokencat.json: invalid JSON ({exc})")
         palette = {}
     colors = skin.get("colors", {}) if isinstance(skin, dict) else {}
     for key in CANONICAL_COLOR_KEYS:
