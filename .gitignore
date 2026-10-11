@@ -20,3 +20,7 @@ htmlcov/
 # No font binaries are vendored
 *.ttf
 *.otf
+
+# Private planning/evidence and local lint cache
+.hermes/
+.ruff_cache/
