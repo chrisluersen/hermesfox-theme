@@ -12,18 +12,7 @@ if __package__:
 else:
     from theme_io import strict_json, strict_yaml
 
-CANONICAL_COLOR_KEYS = (
-    "background", "banner_border", "banner_title", "banner_accent", "banner_dim",
-    "banner_text", "ui_accent", "ui_label", "ui_ok", "ui_error", "ui_warn",
-    "ui_tool", "ui_thinking", "diff_added", "diff_removed", "diff_added_word",
-    "diff_removed_word", "syntax_string", "syntax_number", "syntax_keyword",
-    "syntax_comment", "prompt", "input_rule", "response_border", "status_bar_bg",
-    "status_bar_text", "status_bar_strong", "status_bar_dim", "status_bar_good",
-    "status_bar_warn", "status_bar_bad", "status_bar_critical", "session_label",
-    "session_border", "voice_status_bg", "selection_bg", "completion_menu_bg",
-    "completion_menu_current_bg", "completion_menu_meta_bg",
-    "completion_menu_meta_current_bg", "shell_dollar",
-)
+CANONICAL_COLOR_KEYS = ('background', 'banner_border', 'banner_title', 'banner_accent', 'banner_dim', 'banner_text', 'ui_accent', 'ui_label', 'ui_ok', 'ui_error', 'ui_warn', 'ui_tool', 'ui_thinking', 'diff_added', 'diff_removed', 'diff_added_word', 'diff_removed_word', 'syntax_string', 'syntax_number', 'syntax_keyword', 'syntax_comment', 'prompt', 'input_rule', 'response_border', 'status_bar_bg', 'status_bar_text', 'status_bar_strong', 'status_bar_dim', 'status_bar_good', 'status_bar_warn', 'status_bar_bad', 'status_bar_critical', 'session_label', 'session_border', 'voice_status_bg', 'selection_bg', 'completion_menu_bg', 'completion_menu_current_bg', 'completion_menu_meta_bg', 'completion_menu_meta_current_bg', 'shell_dollar', 'ui_primary', 'ui_text', 'ui_border')
 
 # Pinned semantic roles: the few mappings that define the theme's colour
 # grammar. Everything else is checked against palettes/tokencat.json's own mapping, which
@@ -31,10 +20,10 @@ CANONICAL_COLOR_KEYS = (
 SEMANTIC_MAPPINGS = tuple(
     {"skin": skin, "palette": palette}
     for skin, palette in {
-        "background": "background", "banner_text": "foreground", "banner_dim": "muted",
+        "background": "background", "banner_text": "foreground", "banner_dim": "muted_accessible",
         "ui_accent": "blue", "ui_label": "cyan", "ui_tool": "cyan_bright",
         "ui_ok": "green", "ui_error": "red", "ui_warn": "orange",
-        "syntax_string": "green", "syntax_keyword": "purple", "syntax_comment": "muted",
+        "syntax_string": "green", "syntax_keyword": "purple", "syntax_comment": "muted_accessible",
         "input_rule": "border", "status_bar_bg": "background_alt",
     }.items()
 )

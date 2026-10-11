@@ -88,3 +88,46 @@ class ThemeRegressionTests(unittest.TestCase):
         path.write_text("/home/example/private", encoding="utf-8")
         self.assertEqual(validate_repository(self.root), before)
 
+    def test_all_shared_aliases_are_explicit(self):
+        skin = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))
+        palette = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))
+        for key in ("ui_primary", "ui_text", "ui_border"):
+            with self.subTest(key=key):
+                self.assertIn(key, CANONICAL_COLOR_KEYS)
+                self.assertIn(key, skin["colors"])
+                self.assertIn(key, palette["mappings"]["hermes"])
+
+
+def contrast_ratio(first, second):
+    def luminance(value):
+        channels = [int(value[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        linear = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in channels]
+        return sum(x * weight for x, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
+    dark, light = sorted((luminance(first), luminance(second)))
+    return (light + 0.05) / (dark + 0.05)
+
+
+class ContrastTests(unittest.TestCase):
+    def test_normal_text_pairs_clear_aa(self):
+        base = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))["base"]
+        pairs = (
+            ("foreground", "background"),
+            ("foreground", "surface"),
+            ("foreground", "border"),
+            ("muted_accessible", "surface"),
+            ("muted_accessible", "surface_selected"),
+            ("thinking_accessible", "background"),
+            ("thinking_accessible", "surface"),
+            ("green", "background"),
+            ("orange", "background"),
+            ("red", "background"),
+            ("foreground", "diff_add_bg"),
+            ("foreground", "diff_remove_bg"),
+        )
+        for foreground, background in pairs:
+            with self.subTest(foreground=foreground, background=background):
+                self.assertGreaterEqual(contrast_ratio(base[foreground], base[background]), 4.5)
+
+    def test_focus_accent_clears_nontext_contrast(self):
+        base = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))["base"]
+        self.assertGreaterEqual(contrast_ratio(base["blue"], base["surface"]), 3.0)

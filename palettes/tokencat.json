@@ -21,7 +21,9 @@
     "teal": "#08bdba",
     "thinking": "#8c6fb9",
     "diff_add_bg": "#182f23",
-    "diff_remove_bg": "#361f29"
+    "diff_remove_bg": "#361f29",
+    "muted_accessible": "#97999b",
+    "thinking_accessible": "#a184d0"
   },
   "mappings": {
     "hermes": {
@@ -29,7 +31,7 @@
       "banner_border": "blue",
       "banner_title": "foreground",
       "banner_accent": "blue",
-      "banner_dim": "muted",
+      "banner_dim": "muted_accessible",
       "banner_text": "foreground",
       "ui_accent": "blue",
       "ui_label": "cyan",
@@ -37,7 +39,7 @@
       "ui_error": "red",
       "ui_warn": "orange",
       "ui_tool": "cyan_bright",
-      "ui_thinking": "thinking",
+      "ui_thinking": "thinking_accessible",
       "diff_added": "diff_add_bg",
       "diff_removed": "diff_remove_bg",
       "diff_added_word": "green",
@@ -45,27 +47,30 @@
       "syntax_string": "green",
       "syntax_number": "cyan_bright",
       "syntax_keyword": "purple",
-      "syntax_comment": "muted",
+      "syntax_comment": "muted_accessible",
       "prompt": "blue",
       "input_rule": "border",
       "response_border": "blue",
       "status_bar_bg": "background_alt",
       "status_bar_text": "foreground_alt",
       "status_bar_strong": "foreground",
-      "status_bar_dim": "muted",
+      "status_bar_dim": "muted_accessible",
       "status_bar_good": "green",
       "status_bar_warn": "orange",
       "status_bar_bad": "red",
       "status_bar_critical": "critical",
       "session_label": "blue",
-      "session_border": "muted",
+      "session_border": "muted_accessible",
       "voice_status_bg": "background_alt",
       "selection_bg": "surface_selected",
       "completion_menu_bg": "surface_selected",
       "completion_menu_current_bg": "border",
       "completion_menu_meta_bg": "surface_selected",
       "completion_menu_meta_current_bg": "border",
-      "shell_dollar": "green"
+      "shell_dollar": "green",
+      "ui_primary": "foreground",
+      "ui_text": "foreground",
+      "ui_border": "border"
     }
   },
   "derived_from": {
