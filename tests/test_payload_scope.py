@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
+
 from scripts.validate_theme import _distributable_files
 
 

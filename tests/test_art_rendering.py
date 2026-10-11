@@ -15,7 +15,9 @@ def rendered_rows(markup):
 
 class ArtworkTests(unittest.TestCase):
     def setUp(self):
-        self.source = (ROOT / "ascii-art/token-cat-29x11.txt").read_text(encoding="utf-8").splitlines()
+        self.source = (
+            (ROOT / "ascii-art/token-cat-29x11.txt").read_text(encoding="utf-8").splitlines()
+        )
         self.source = [row.rstrip() for row in self.source]
         self.skin = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))
 

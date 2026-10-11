@@ -1,4 +1,5 @@
 """Validate the portable Hermesfox theme bundle."""
+
 from __future__ import annotations
 
 import argparse
@@ -14,7 +15,52 @@ else:
     from export_contract import validate_exports
     from theme_io import strict_json, strict_yaml
 
-CANONICAL_COLOR_KEYS = ('background', 'banner_border', 'banner_title', 'banner_accent', 'banner_dim', 'banner_text', 'ui_accent', 'ui_label', 'ui_ok', 'ui_error', 'ui_warn', 'ui_tool', 'ui_thinking', 'diff_added', 'diff_removed', 'diff_added_word', 'diff_removed_word', 'syntax_string', 'syntax_number', 'syntax_keyword', 'syntax_comment', 'prompt', 'input_rule', 'response_border', 'status_bar_bg', 'status_bar_text', 'status_bar_strong', 'status_bar_dim', 'status_bar_good', 'status_bar_warn', 'status_bar_bad', 'status_bar_critical', 'session_label', 'session_border', 'voice_status_bg', 'selection_bg', 'completion_menu_bg', 'completion_menu_current_bg', 'completion_menu_meta_bg', 'completion_menu_meta_current_bg', 'shell_dollar', 'ui_primary', 'ui_text', 'ui_border')
+CANONICAL_COLOR_KEYS = (
+    "background",
+    "banner_border",
+    "banner_title",
+    "banner_accent",
+    "banner_dim",
+    "banner_text",
+    "ui_accent",
+    "ui_label",
+    "ui_ok",
+    "ui_error",
+    "ui_warn",
+    "ui_tool",
+    "ui_thinking",
+    "diff_added",
+    "diff_removed",
+    "diff_added_word",
+    "diff_removed_word",
+    "syntax_string",
+    "syntax_number",
+    "syntax_keyword",
+    "syntax_comment",
+    "prompt",
+    "input_rule",
+    "response_border",
+    "status_bar_bg",
+    "status_bar_text",
+    "status_bar_strong",
+    "status_bar_dim",
+    "status_bar_good",
+    "status_bar_warn",
+    "status_bar_bad",
+    "status_bar_critical",
+    "session_label",
+    "session_border",
+    "voice_status_bg",
+    "selection_bg",
+    "completion_menu_bg",
+    "completion_menu_current_bg",
+    "completion_menu_meta_bg",
+    "completion_menu_meta_current_bg",
+    "shell_dollar",
+    "ui_primary",
+    "ui_text",
+    "ui_border",
+)
 
 # Pinned semantic roles: the few mappings that define the theme's colour
 # grammar. Everything else is checked against palettes/tokencat.json's own mapping, which
@@ -22,11 +68,20 @@ CANONICAL_COLOR_KEYS = ('background', 'banner_border', 'banner_title', 'banner_a
 SEMANTIC_MAPPINGS = tuple(
     {"skin": skin, "palette": palette}
     for skin, palette in {
-        "background": "background", "banner_text": "foreground", "banner_dim": "muted_accessible",
-        "ui_accent": "blue", "ui_label": "cyan", "ui_tool": "cyan_bright",
-        "ui_ok": "green", "ui_error": "red", "ui_warn": "orange",
-        "syntax_string": "green", "syntax_keyword": "purple", "syntax_comment": "muted_accessible",
-        "input_rule": "border", "status_bar_bg": "background_alt",
+        "background": "background",
+        "banner_text": "foreground",
+        "banner_dim": "muted_accessible",
+        "ui_accent": "blue",
+        "ui_label": "cyan",
+        "ui_tool": "cyan_bright",
+        "ui_ok": "green",
+        "ui_error": "red",
+        "ui_warn": "orange",
+        "syntax_string": "green",
+        "syntax_keyword": "purple",
+        "syntax_comment": "muted_accessible",
+        "input_rule": "border",
+        "status_bar_bg": "background_alt",
     }.items()
 )
 
@@ -38,9 +93,17 @@ USER_PATH_RE = re.compile(
     r"|/(?:home|root)/[^/\s\"']+"
 )
 PLACEHOLDER_MARKERS = ("<USER>",)
-JSON_FILES = ('palettes/tokencat.json', 'vscode/tokencat.vscode-theme.json', 'vscode/tokencat-color-customizations.json', 'windows-terminal/tokencat.scheme.json', 'palette.json', 'windows-terminal/scheme.json', 'vscode/carbonfox.vscode-theme.json', 'vscode/vscode-color-customizations.json', 'vscode/package.json')
-
-
+JSON_FILES = (
+    "palettes/tokencat.json",
+    "vscode/tokencat.vscode-theme.json",
+    "vscode/tokencat-color-customizations.json",
+    "windows-terminal/tokencat.scheme.json",
+    "palette.json",
+    "windows-terminal/scheme.json",
+    "vscode/carbonfox.vscode-theme.json",
+    "vscode/vscode-color-customizations.json",
+    "vscode/package.json",
+)
 
 
 def _parse_skin(text: str) -> dict[str, Any]:
@@ -76,7 +139,16 @@ def _source_hero(root: Path) -> list[str] | None:
 def _distributable_files(root: Path) -> list[Path]:
     files = list(root.glob("*.md"))
     files.append(root / "palette.json")
-    for directory in ("palettes", "hermes", "ascii-art", "fonts", "vscode", "windows-terminal", "licenses", "docs"):
+    for directory in (
+        "palettes",
+        "hermes",
+        "ascii-art",
+        "fonts",
+        "vscode",
+        "windows-terminal",
+        "licenses",
+        "docs",
+    ):
         base = root / directory
         if base.is_dir():
             files.extend(p for p in base.rglob("*") if p.is_file())
@@ -98,7 +170,24 @@ def check_palette_shape(data):
         raise ValueError("Hermes mappings must reference named tokens")
     return data
 
-REQUIRED_FILES = ('palette.json', 'hermes/skins/carbonfox.yaml', 'windows-terminal/scheme.json', 'vscode/carbonfox.vscode-theme.json', 'vscode/vscode-color-customizations.json', 'palettes/tokencat.json', 'hermes/skins/tokencat.yaml', 'ascii-art/token-cat-29x11.txt', 'ascii-art/token-cat-two-tone.rich.txt', 'windows-terminal/tokencat.scheme.json', 'vscode/tokencat.vscode-theme.json', 'vscode/tokencat-color-customizations.json', 'hermes/dashboard-themes/tokencat.yaml', 'vscode/package.json')
+
+REQUIRED_FILES = (
+    "palette.json",
+    "hermes/skins/carbonfox.yaml",
+    "windows-terminal/scheme.json",
+    "vscode/carbonfox.vscode-theme.json",
+    "vscode/vscode-color-customizations.json",
+    "palettes/tokencat.json",
+    "hermes/skins/tokencat.yaml",
+    "ascii-art/token-cat-29x11.txt",
+    "ascii-art/token-cat-two-tone.rich.txt",
+    "windows-terminal/tokencat.scheme.json",
+    "vscode/tokencat.vscode-theme.json",
+    "vscode/tokencat-color-customizations.json",
+    "hermes/dashboard-themes/tokencat.yaml",
+    "vscode/package.json",
+)
+
 
 def validate_repository(root: Path) -> list[str]:
     violations: list[str] = []
@@ -125,13 +214,15 @@ def validate_repository(root: Path) -> list[str]:
         if key not in colors:
             violations.append(f"skin missing required color: {key}")
     if isinstance(skin, dict) and skin.get("banner_logo") != " ":
-        violations.append('banner_logo must be exactly one space')
+        violations.append("banner_logo must be exactly one space")
     if isinstance(skin, dict) and "banner_hero" in skin:
         expected = _source_hero(root)
         if expected is not None and _plain_hero(str(skin["banner_hero"])) != expected:
             violations.append("banner_hero does not match token-cat source")
     palette_base = palette.get("base", {}) if isinstance(palette, dict) else {}
-    palette_hermes = palette.get("mappings", {}).get("hermes", {}) if isinstance(palette, dict) else {}
+    palette_hermes = (
+        palette.get("mappings", {}).get("hermes", {}) if isinstance(palette, dict) else {}
+    )
     if set(palette_hermes) != set(CANONICAL_COLOR_KEYS):
         violations.append("palette Hermes mapping must cover every canonical skin color")
     for mapping in SEMANTIC_MAPPINGS:
@@ -141,7 +232,9 @@ def validate_repository(root: Path) -> list[str]:
         if token not in palette_base:
             violations.append(f"palette missing mapped base token: {key} -> {token}")
         elif key in colors and colors[key].lower() != palette_base[token].lower():
-            violations.append(f"skin/palette drift: {key} {colors[key]} != {token} {palette_base[token]}")
+            violations.append(
+                f"skin/palette drift: {key} {colors[key]} != {token} {palette_base[token]}"
+            )
     for name in JSON_FILES:
         path = root / name
         if path.exists():
@@ -159,7 +252,9 @@ def validate_repository(root: Path) -> list[str]:
             continue
         for marker in PLACEHOLDER_MARKERS:
             if marker in text:
-                violations.append(f"{path.relative_to(root)}: contains non-portable marker {marker}")
+                violations.append(
+                    f"{path.relative_to(root)}: contains non-portable marker {marker}"
+                )
         for match in USER_PATH_RE.finditer(text):
             violations.append(
                 f"{path.relative_to(root)}: contains non-portable marker {match.group(0)}"

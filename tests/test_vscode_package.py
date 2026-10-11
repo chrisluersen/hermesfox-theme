@@ -18,7 +18,10 @@ class VSCodePackageTests(unittest.TestCase):
         self.assertEqual(len(themes), 2)
         self.assertEqual(
             {theme["label"]: theme["path"] for theme in themes},
-            {"Tokencat": "./tokencat.vscode-theme.json", "Carbonfox (Legacy)": "./carbonfox.vscode-theme.json"},
+            {
+                "Tokencat": "./tokencat.vscode-theme.json",
+                "Carbonfox (Legacy)": "./carbonfox.vscode-theme.json",
+            },
         )
         for theme in themes:
             self.assertEqual(theme["uiTheme"], "vs-dark")

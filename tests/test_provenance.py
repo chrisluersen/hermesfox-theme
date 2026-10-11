@@ -16,6 +16,7 @@ class ProvenanceTests(unittest.TestCase):
 
     def test_upgrade_records_full_pinned_source_chain(self):
         import json
+
         data = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))
         lineage = data["derived_from"]
         prefix = "https://github.com/EdenEast/nightfox.nvim/blob/4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a/"

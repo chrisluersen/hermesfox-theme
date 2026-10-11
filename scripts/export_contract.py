@@ -1,4 +1,5 @@
 """Validate every mapped color in the shipped companion exports."""
+
 import re
 from pathlib import Path
 
@@ -7,7 +8,12 @@ if __package__:
 else:
     from theme_io import strict_json, strict_yaml
 
-EXPORT_FILES = ('windows-terminal/tokencat.scheme.json', 'vscode/tokencat.vscode-theme.json', 'vscode/tokencat-color-customizations.json', 'hermes/dashboard-themes/tokencat.yaml')
+EXPORT_FILES = (
+    "windows-terminal/tokencat.scheme.json",
+    "vscode/tokencat.vscode-theme.json",
+    "vscode/tokencat-color-customizations.json",
+    "hermes/dashboard-themes/tokencat.yaml",
+)
 HEX = re.compile(r"#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\Z")
 
 

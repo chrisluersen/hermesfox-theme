@@ -17,12 +17,17 @@ class FontInstallerTests(unittest.TestCase):
         temp, root, archive, font_dir, bin_dir = self.make_fixture(
             {"HackNerdFontMono-Regular.ttf": "mono"}
         )
-        with temp, patch("subprocess.run", return_value=subprocess.CompletedProcess([], 0, "", "")) as run:
+        with (
+            temp,
+            patch("subprocess.run", return_value=subprocess.CompletedProcess([], 0, "", "")) as run,
+        ):
             self.run_installer(archive, font_dir, bin_dir)
         command = run.call_args.args[0]
         self.assertEqual(command[1], "-c")
         self.assertIn("TOKENCAT_FAKE_REG", command[2])
-        self.assertEqual(run.call_args.kwargs["env"]["TOKENCAT_FAKE_REG"], (bin_dir / "reg").as_posix())
+        self.assertEqual(
+            run.call_args.kwargs["env"]["TOKENCAT_FAKE_REG"], (bin_dir / "reg").as_posix()
+        )
 
     def _run_guarded(self, bash, env, bin_dir):
         guarded = env.copy()
@@ -34,7 +39,10 @@ class FontInstallerTests(unittest.TestCase):
         )
         return subprocess.run(
             [bash, "-c", guard, "font-installer-test", str(INSTALLER)],
-            cwd=ROOT, env=guarded, text=True, capture_output=True,
+            cwd=ROOT,
+            env=guarded,
+            text=True,
+            capture_output=True,
         )
 
     def test_shadowed_registry_command_blocks_before_install(self):
@@ -99,7 +107,9 @@ class FontInstallerTests(unittest.TestCase):
             self.assertIn("registry: success", result.stdout)
 
     def test_rejects_bad_checksum_before_extracting(self):
-        temp, root, archive, font_dir, bin_dir = self.make_fixture({"HackNerdFontMono-Regular.ttf": "mono"})
+        temp, root, archive, font_dir, bin_dir = self.make_fixture(
+            {"HackNerdFontMono-Regular.ttf": "mono"}
+        )
         with temp:
             result = self.run_installer(archive, font_dir, bin_dir, HACK_NERD_FONT_SHA256="0" * 64)
             self.assertNotEqual(result.returncode, 0)
@@ -107,14 +117,18 @@ class FontInstallerTests(unittest.TestCase):
             self.assertFalse(font_dir.exists())
 
     def test_fails_when_archive_has_no_mono_fonts(self):
-        temp, root, archive, font_dir, bin_dir = self.make_fixture({"HackNerdFont-Regular.ttf": "regular"})
+        temp, root, archive, font_dir, bin_dir = self.make_fixture(
+            {"HackNerdFont-Regular.ttf": "regular"}
+        )
         with temp:
             result = self.run_installer(archive, font_dir, bin_dir)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("no HackNerdFontMono", result.stderr)
 
     def test_requires_font_dir_or_localappdata(self):
-        temp, root, archive, font_dir, bin_dir = self.make_fixture({"HackNerdFontMono-Regular.ttf": "mono"})
+        temp, root, archive, font_dir, bin_dir = self.make_fixture(
+            {"HackNerdFontMono-Regular.ttf": "mono"}
+        )
         with temp:
             env = os.environ.copy()
             env.pop("FONT_DIR", None)
@@ -131,7 +145,9 @@ class FontInstallerTests(unittest.TestCase):
             self.assertIn("FONT_DIR or LOCALAPPDATA must be set", result.stderr)
 
     def test_registry_failure_is_reported_after_copy(self):
-        temp, root, archive, font_dir, bin_dir = self.make_fixture({"HackNerdFontMono-Regular.ttf": "mono"})
+        temp, root, archive, font_dir, bin_dir = self.make_fixture(
+            {"HackNerdFontMono-Regular.ttf": "mono"}
+        )
         with temp:
             (bin_dir / "reg").write_text("#!/bin/sh\nexit 9\n", encoding="utf-8")
             result = self.run_installer(archive, font_dir, bin_dir)

@@ -1,4 +1,5 @@
 import json
+
 import yaml
 
 
@@ -42,4 +43,6 @@ def _reject_json_constant(value):
 
 
 def strict_json(text):
-    return json.loads(text, object_pairs_hook=_unique_json_pairs, parse_constant=_reject_json_constant)
+    return json.loads(
+        text, object_pairs_hook=_unique_json_pairs, parse_constant=_reject_json_constant
+    )
