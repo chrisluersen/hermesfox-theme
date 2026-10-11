@@ -123,6 +123,8 @@ class ThemeRegressionTests(unittest.TestCase):
         self.assertNotIn("assets", data)
 
 
+
+
 def contrast_ratio(first, second):
     def luminance(value):
         channels = [int(value[i:i + 2], 16) / 255 for i in (1, 3, 5)]
