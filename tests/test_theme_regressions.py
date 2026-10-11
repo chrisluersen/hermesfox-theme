@@ -189,3 +189,24 @@ class ContrastTests(unittest.TestCase):
         for token in ("diff_add_word_bg", "diff_remove_word_bg"):
             with self.subTest(token=token):
                 self.assertGreaterEqual(contrast_ratio(base["foreground"], base[token]), 4.5)
+
+    def test_emitted_skin_text_and_diff_pairs_clear_aa(self):
+        skin = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))
+        colors = skin["colors"]
+        pairs = (
+            ("ui_text", "background"),
+            ("ui_primary", "background"),
+            ("ui_thinking", "background"),
+            ("banner_dim", "background"),
+            ("syntax_comment", "background"),
+            ("status_bar_text", "status_bar_bg"),
+            ("status_bar_dim", "status_bar_bg"),
+            ("status_bar_good", "status_bar_bg"),
+            ("status_bar_warn", "status_bar_bg"),
+            ("status_bar_bad", "status_bar_bg"),
+            ("diff_added_word", "diff_added"),
+            ("diff_removed_word", "diff_removed"),
+        )
+        for foreground, background in pairs:
+            with self.subTest(foreground=foreground, background=background):
+                self.assertGreaterEqual(contrast_ratio(colors[foreground], colors[background]), 4.5)

@@ -1,6 +1,6 @@
 name: tokencat
 label: Tokencat
-description: Carbonfox-derived dark palette coordinated with Hermesfox.
+description: Tokencat - a Carbonfox-derived dashboard palette with explicit readability roles.
 palette:
   background:
     hex: "#161616"

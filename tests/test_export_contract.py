@@ -169,3 +169,27 @@ class ExportContractTests(unittest.TestCase):
 
         errors = self._errors_after(mutate)
         self.assertTrue(any("duplicate key: name" in item for item in errors))
+
+    def test_terminal_variants_have_distinct_names_and_complete_schema(self):
+        ansi = {"black", "red", "green", "yellow", "blue", "purple", "cyan", "white"}
+        expected = (
+            ansi
+            | {"bright" + name.title() for name in ansi}
+            | {
+                "name",
+                "background",
+                "foreground",
+                "cursorColor",
+                "selectionBackground",
+            }
+        )
+        for relative, name in (
+            ("windows-terminal/tokencat.scheme.json", "tokencat"),
+            ("windows-terminal/scheme.json", "carbonfox"),
+        ):
+            with self.subTest(variant=name):
+                data = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+                self.assertEqual(set(data), expected)
+                self.assertEqual(data["name"], name)
+                for key in expected - {"name"}:
+                    self.assertRegex(data[key], r"^#[0-9a-fA-F]{6}$")
