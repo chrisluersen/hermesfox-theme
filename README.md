@@ -2,7 +2,7 @@
 
 A Carbonfox-derived dark theme for Hermes and companion apps, with an unchanged **Carbonfox (Legacy)** variant for switching back. The repository remains `chrisluersen/hermesfox-theme`; `tokencat-theme` is a proposed future name, not a completed rename or a publication claim.
 
-This is a local candidate. Repository checks and Rich markup tests are not proof of rendered CLI, Ink TUI, dashboard, desktop, Windows Terminal or VS Code compatibility. See [the per-surface evidence matrix](docs/compatibility.md), [palette lineage](docs/palette.md), [validation](docs/validation.md), and [rights/attribution](NOTICE.md).
+This is a review candidate, not a production-readiness claim. Local quality checks pass and VS Code has partial isolated runtime evidence; CLI, Ink TUI, dashboard, desktop and Windows Terminal runtime acceptance remain outstanding. See [the per-surface evidence matrix](docs/compatibility.md), [palette lineage](docs/palette.md), [validation](docs/validation.md), and [rights/attribution](NOTICE.md).
 
 ## Shipped variants
 
@@ -21,7 +21,7 @@ All original base values, original exports and the cat sources are hash-guarded 
 
 ## Safe installation and rollback — only when separately authorized
 
-No app was activated as part of building this candidate. First validate the exact app/version in an isolated context. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from the reviewed local checkout; the new files are not yet available from the public default branch.
+No live profile was activated; verification used isolated VS Code contexts. First validate the exact app/version in an isolated context. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
 
 ### Hermes CLI, TUI and desktop
 
@@ -60,7 +60,7 @@ Back up the settings file, then merge both scheme objects into its existing `sch
 
 ### VS Code
 
-Prefer the supplied theme-only extension manifest in an isolated Extension Development Host with fresh user-data/extensions directories. Select **Tokencat**, **Carbonfox (Legacy)**, then **Tokencat**, and verify the actual workbench, syntax, diff, status bar and integrated terminal states.
+Use the supplied theme-only extension manifest in an isolated context with fresh user-data/extensions directories. An Extension Development Host is useful for initial loading; verify ordinary status-bar behavior separately in a normal window with a private passive extension copy and a synthetic folder open. A no-folder window can use different fallback colors. Select **Tokencat**, **Carbonfox (Legacy)**, then **Tokencat**, and verify the actual workbench, syntax, diff, status bar and integrated terminal states.
 
 Alternatively, merge the selected `*-color-customizations.json` fragment into a backed-up settings object. Merge the two named customization objects, preserving unrelated existing keys. Explicit customization keys override a selected theme, so selecting Carbonfox alone will not undo a Tokencat merge: restore the recorded prior values (or remove only keys that did not exist before). Do not replace complete User Settings or assume the generated fragment is a comment-bearing JSONC parser.
 
