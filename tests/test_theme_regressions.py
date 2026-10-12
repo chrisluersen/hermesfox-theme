@@ -60,6 +60,15 @@ class ThemeRegressionTests(unittest.TestCase):
             any("non-finite JSON constant" in item for item in validate_repository(self.root))
         )
 
+    def test_overflow_palette_metadata_is_rejected(self):
+        self.assertEqual(validate_repository(self.root), [])
+        path = self.root / "palettes/tokencat.json"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace("{", '{"audit_probe":1e999,', 1), encoding="utf-8")
+        self.assertTrue(
+            any("non-finite JSON number" in item for item in validate_repository(self.root))
+        )
+
     def test_palette_wrong_shape_returns_violations(self):
         for value in ([], {"base": [], "mappings": {}}, {"base": {}, "mappings": []}):
             with self.subTest(value=value):

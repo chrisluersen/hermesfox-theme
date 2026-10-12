@@ -1,4 +1,5 @@
 import json
+import math
 
 import yaml
 
@@ -42,7 +43,17 @@ def _reject_json_constant(value):
     raise ValueError(f"non-finite JSON constant: {value}")
 
 
+def _finite_json_float(value):
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError(f"non-finite JSON number: {value}")
+    return number
+
+
 def strict_json(text):
     return json.loads(
-        text, object_pairs_hook=_unique_json_pairs, parse_constant=_reject_json_constant
+        text,
+        object_pairs_hook=_unique_json_pairs,
+        parse_constant=_reject_json_constant,
+        parse_float=_finite_json_float,
     )
