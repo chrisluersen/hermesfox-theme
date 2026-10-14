@@ -21,9 +21,30 @@ This is a source-qualified theme bundle, not a claim of complete app/runtime acc
 
 All original base values, original exports and the cat sources are hash-guarded against revision `793dcd583c873a7512c6d2a5222d4d0b697f704c`. New aliases and readability overrides exist only in the upgrade. Legacy intentionally retains its previous visual limitations; rollback does not mean it has passed new contrast targets.
 
+## Agent installation and setup quick-start
+
+This guide helps another agent install the theme **only after that workstation's user explicitly authorizes the target app/profile and the requested effect**. This README is not permission to install or activate anything. Installing files and changing an app's selected theme are separate actions.
+
+1. **Use the intended source revision.** Record `git rev-parse HEAD`, inspect its changes and CI, and confirm it is the revision the user asked to install. A pushed feature branch is not automatically merged, released, or suitable for installation; do not silently substitute `master` or another branch.
+2. **Inventory and preserve the target.** Identify the exact app, version, profile/config directory and current theme selection. Back up only the files/settings that will be changed, preserve existing Carbonfox and unrelated settings, and use each app's supported install/selection method. Never replace an entire app configuration file or profile.
+3. **Follow the matching surface procedure below.** These exports are separate formats; do not copy every file into every application's config directory. No font installation or Hermes source patch is required.
+4. **Read back and verify in the real app.** Confirm the installed files and selected theme, inspect the target surface's meaningful visual states, and state which surfaces were and were not verified. Parser, schema, or unit-test results are not live-app acceptance.
+5. **Stop safely on a blocked target.** If the exact app/window cannot be inspected safely, leave that surface pending. Do not force input to another window, restart an active app, close user tabs, or claim success from a settings write alone. Roll back by restoring the recorded prior selection and only the files/keys changed.
+
+| Surface | Artifact | Setup instructions |
+|---|---|---|
+| Hermes CLI / TUI / desktop | `hermes/skins/tokencat.yaml` | [Hermes procedure](#hermes-cli-tui-and-desktop); set `HERMES_HOME` explicitly and use `hermes config set display.skin tokencat`. |
+| Hermes dashboard | `hermes/dashboard-themes/tokencat.yaml` | Follow the separate Dashboard procedure below; install independently from the Hermes skin, then select in its picker. |
+| Windows Terminal | `windows-terminal/tokencat.scheme.json` | [Windows Terminal procedure](#windows-terminal); merge the scheme by unique name and change only the intended profile's `colorScheme`. |
+| VS Code | `vscode/` theme-only extension | [VS Code procedure](#vs-code); with an already available/approved `@vscode/vsce` CLI, run `vsce package` from `vscode/`, install the VSIX with the VS Code CLI, then select **Tokencat**. The contribution also retains **Carbonfox (Legacy)**. |
+| WezTerm | `wezterm/tokencat.toml` | [WezTerm procedure](#wezterm); integrate the standalone color scheme into the existing Lua config without replacing it. |
+| Zellij | `zellij/tokencat.kdl` | [Zellij procedure](#zellij); install the named theme and validate with the target's native Zellij version before selecting it. |
+
+The detailed steps below include per-surface rollback and known qualification limits. In particular, no native Zellij runtime was available during this bundle's qualification, and Windows Terminal's visual states still require verification on the target installation.
+
 ## Safe installation and rollback — only when separately authorized
 
-No live theme selection was activated. VS Code used separate settings/extension directories, and WezTerm used a separate config/process. VS Code also opened existing app-global shared storage; without a before-image, its integrity or unchanged state cannot be asserted. Captured fingerprint matches establish preservation only for the specifically measured files at the time of comparison, not the entire profile or an ongoing guarantee. A later comparison detected configuration drift; its cause was not established or reversed, and the legacy theme remained selected. Rendered-state evidence is not proof of whole-profile isolation. First qualify the exact app/version and all relevant storage boundaries before a future preview. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
+Source qualification did not itself activate a live theme selection; any downstream deployment is a separate, user-authorized operation. VS Code used separate settings/extension directories, and WezTerm used a separate config/process. VS Code also opened existing app-global shared storage; without a before-image, its integrity or unchanged state cannot be asserted. Captured fingerprint matches establish preservation only for the specifically measured files at the time of comparison, not the entire profile or an ongoing guarantee. A later comparison detected configuration drift; its cause was not established or reversed, and the legacy theme remained selected. Rendered-state evidence is not proof of whole-profile isolation. First qualify the exact app/version and all relevant storage boundaries before a future preview. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
 
 ### Hermes CLI, TUI and desktop
 
