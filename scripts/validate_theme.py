@@ -98,6 +98,7 @@ JSON_FILES = (
     "vscode/tokencat.vscode-theme.json",
     "vscode/tokencat-color-customizations.json",
     "windows-terminal/tokencat.scheme.json",
+    "windows-terminal/hermesfox.scheme.json",
     "palette.json",
     "windows-terminal/scheme.json",
     "vscode/carbonfox.vscode-theme.json",
@@ -106,12 +107,12 @@ JSON_FILES = (
 )
 
 
-def _parse_skin(text: str) -> dict[str, Any]:
+def _parse_skin(text: str, name: str = "tokencat") -> dict[str, Any]:
     data = strict_yaml(text)
     if not isinstance(data, dict):
         raise ValueError("skin must be an object")
-    if data.get("name") != "tokencat":
-        raise ValueError("skin name must be tokencat")
+    if data.get("name") != name:
+        raise ValueError(f"skin name must be {name}")
     colors = data.get("colors")
     if not isinstance(colors, dict) or not colors:
         raise ValueError("missing colors map")
@@ -176,6 +177,8 @@ def check_palette_shape(data):
 REQUIRED_FILES = (
     "palette.json",
     "hermes/skins/carbonfox.yaml",
+    "hermes/skins/hermesfox.yaml",
+    "windows-terminal/hermesfox.scheme.json",
     "windows-terminal/scheme.json",
     "vscode/carbonfox.vscode-theme.json",
     "vscode/vscode-color-customizations.json",
@@ -191,6 +194,60 @@ REQUIRED_FILES = (
     "zellij/tokencat.kdl",
     "vscode/package.json",
 )
+
+
+def _validate_hermesfox(root: Path, current: dict[str, Any]) -> list[str]:
+    violations = []
+    relative = "hermes/skins/hermesfox.yaml"
+    try:
+        fox = _parse_skin((root / relative).read_text(encoding="utf-8"), "hermesfox")
+        legacy = _parse_skin(
+            (root / "hermes/skins/carbonfox.yaml").read_text(encoding="utf-8"), "carbonfox"
+        )
+        if fox["colors"] != legacy["colors"]:
+            violations.append(f"{relative}: colors must match original Carbonfox")
+        if fox.get("branding") != {"agent_name": "Hermesfox"}:
+            violations.append(f"{relative}: title must be Hermesfox")
+        if fox.get("banner_hero") != current.get("banner_hero"):
+            violations.append(f"{relative}: hero must match Tokencat")
+        if fox.get("banner_logo") != " ":
+            violations.append(f"{relative}: banner_logo must be exactly one space")
+        if set(fox) != set(legacy):
+            violations.append(f"{relative}: fields must match original skin")
+    except (OSError, ValueError) as exc:
+        violations.append(f"{relative}: invalid skin or original reference ({exc})")
+
+    relative = "windows-terminal/hermesfox.scheme.json"
+    try:
+        fox = strict_json((root / relative).read_text(encoding="utf-8"))
+        legacy = strict_json((root / "windows-terminal/scheme.json").read_text(encoding="utf-8"))
+        if not isinstance(fox, dict) or not isinstance(legacy, dict):
+            raise ValueError("schemes must be objects")
+        if fox.pop("name", None) != "hermesfox":
+            violations.append(f"{relative}: scheme name must be hermesfox")
+        legacy.pop("name", None)
+        if fox != legacy:
+            violations.append(f"{relative}: colors must match original Carbonfox")
+    except (OSError, ValueError) as exc:
+        violations.append(f"{relative}: invalid scheme or original reference ({exc})")
+
+    try:
+        manifest = strict_json((root / "vscode/package.json").read_text(encoding="utf-8"))
+        if not isinstance(manifest, dict) or not isinstance(manifest.get("contributes"), dict):
+            raise ValueError("manifest contributions must be an object")
+        themes = manifest["contributes"].get("themes")
+        if not isinstance(themes, list) or not all(isinstance(item, dict) for item in themes):
+            raise ValueError("themes must be an array of objects")
+        fox = [item for item in themes if item.get("label") == "Hermesfox"]
+        if len(fox) != 1 or fox[0] != {
+            "label": "Hermesfox",
+            "uiTheme": "vs-dark",
+            "path": "./carbonfox.vscode-theme.json",
+        }:
+            violations.append("vscode/package.json: Hermesfox must select original dark theme")
+    except (OSError, ValueError) as exc:
+        violations.append(f"vscode/package.json: invalid manifest ({exc})")
+    return violations
 
 
 def validate_repository(root: Path) -> list[str]:
@@ -264,6 +321,7 @@ def validate_repository(root: Path) -> list[str]:
                 f"{path.relative_to(root)}: contains non-portable marker {match.group(0)}"
             )
     violations.extend(validate_exports(root))
+    violations.extend(_validate_hermesfox(root, skin))
     return violations
 
 
