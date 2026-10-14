@@ -146,6 +146,8 @@ def _distributable_files(root: Path) -> list[Path]:
         "fonts",
         "vscode",
         "windows-terminal",
+        "wezterm",
+        "zellij",
         "licenses",
         "docs",
     ):
@@ -185,6 +187,8 @@ REQUIRED_FILES = (
     "vscode/tokencat.vscode-theme.json",
     "vscode/tokencat-color-customizations.json",
     "hermes/dashboard-themes/tokencat.yaml",
+    "wezterm/tokencat.toml",
+    "zellij/tokencat.kdl",
     "vscode/package.json",
 )
 

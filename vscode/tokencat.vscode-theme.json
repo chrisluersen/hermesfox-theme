@@ -18,6 +18,8 @@
     "editorSuggestWidget.selectedBackground": "#525253",
     "editorSuggestWidget.foreground": "#f2f4f8",
     "editorSuggestWidget.highlightForeground": "#78a9ff",
+    "editorSuggestWidget.selectedForeground": "#f2f4f8",
+    "editorSuggestWidget.focusHighlightForeground": "#3ddbd9",
     "editorGroupHeader.tabsBackground": "#0d0d0d",
     "editorGroupHeader.tabsBorder": "#282828",
     "tab.activeBackground": "#161616",

@@ -11,7 +11,8 @@ description: Tokencat - a Carbonfox-derived dark theme with explicit readability
 #   cyan   = labels/keys          teal = tool calls (the cat's feet colour)
 #   purple = reasoning, dimmed 70% toward bg so it never outshines the answer
 #   gray   = passive chrome: input rule, borders, separators
-# Surfaces follow nvim: status line on bg0, popup on sel0, popup selection sel1.
+# Surfaces follow nvim: status line on bg0, popup on sel0, label selection sel1.
+# Selected metadata keeps sel0 so its cyan foreground meets normal-text AA.
 # Syntax + diff follow nightfox's spec (string green, keyword magenta, number
 # "orange"=teal; diff rows are 15% hue blends over bg), so code in Hermes looks
 # like code in nvim.
@@ -59,7 +60,7 @@ colors:
   completion_menu_bg: "#2a2a2a"      # Popup (sel0, like nvim Pmenu)
   completion_menu_current_bg: "#525253"   # Popup selection (sel1, like PmenuSel)
   completion_menu_meta_bg: "#2a2a2a"      # Popup meta column
-  completion_menu_meta_current_bg: "#525253"  # Popup meta selection
+  completion_menu_meta_current_bg: "#2a2a2a"  # Popup meta selection; cyan text AA
 
 # Branding — keep agent identity, tune nothing for theme.
 branding:

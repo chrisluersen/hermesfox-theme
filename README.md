@@ -2,7 +2,7 @@
 
 A Carbonfox-derived dark theme for Hermes and companion apps, with an unchanged **Carbonfox (Legacy)** variant for switching back. The repository remains `chrisluersen/hermesfox-theme`; `tokencat-theme` is a proposed future name, not a completed rename or a publication claim.
 
-This is a review candidate, not a production-readiness claim. Local quality checks pass and VS Code has partial isolated runtime evidence; CLI, Ink TUI, dashboard, desktop and Windows Terminal runtime acceptance remain outstanding. See [the per-surface evidence matrix](docs/compatibility.md), [palette lineage](docs/palette.md), [validation](docs/validation.md), and [rights/attribution](NOTICE.md).
+This is a source-qualified theme bundle, not a claim of complete app/runtime acceptance. VS Code suggestion states were verified visually and by computed styles through switching and cold restart; WezTerm loaded and displayed the new native scheme. Native Hermes skin/normalizer/converter checks pass, while full CLI/TUI/dashboard/desktop, Windows Terminal and Zellij app acceptance remain outstanding. See [the per-surface evidence matrix](docs/compatibility.md), [palette lineage](docs/palette.md), [validation](docs/validation.md), and [rights/attribution](NOTICE.md).
 
 ## Shipped variants
 
@@ -14,6 +14,8 @@ This is a review candidate, not a production-readiness claim. Local quality chec
 | Windows Terminal | `windows-terminal/tokencat.scheme.json`, name `tokencat` | `windows-terminal/scheme.json`, name `carbonfox` |
 | VS Code theme | `vscode/tokencat.vscode-theme.json`, label **Tokencat** | `vscode/carbonfox.vscode-theme.json`, label **Carbonfox (Legacy)** |
 | VS Code merge fragment | `vscode/tokencat-color-customizations.json` | `vscode/vscode-color-customizations.json` |
+| WezTerm | `wezterm/tokencat.toml`, scheme **Tokencat** | No legacy companion export existed; preserve the user's prior choice |
+| Zellij | `zellij/tokencat.kdl`, theme `tokencat` | No legacy companion export existed; preserve the user's prior choice |
 
 `vscode/package.json` contributes both themes in one minimal, code-free local extension. Its declared baseline is VS Code `^1.136.2`; older versions are not claimed supported. Local construction does not establish Marketplace ownership or publishing rights.
 
@@ -21,7 +23,7 @@ All original base values, original exports and the cat sources are hash-guarded 
 
 ## Safe installation and rollback — only when separately authorized
 
-No live profile was activated; verification used isolated VS Code contexts. First validate the exact app/version in an isolated context. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
+No live theme selection was activated. VS Code used separate settings/extension directories, and WezTerm used a separate config/process. VS Code also opened existing app-global shared storage; without a before-image, its integrity or unchanged state cannot be asserted. Captured fingerprint matches establish preservation only for the specifically measured files at the time of comparison, not the entire profile or an ongoing guarantee. A later comparison detected configuration drift; its cause was not established or reversed, and the legacy theme remained selected. Rendered-state evidence is not proof of whole-profile isolation. First qualify the exact app/version and all relevant storage boundaries before a future preview. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
 
 ### Hermes CLI, TUI and desktop
 
@@ -60,9 +62,31 @@ Back up the settings file, then merge both scheme objects into its existing `sch
 
 ### VS Code
 
-Use the supplied theme-only extension manifest in an isolated context with fresh user-data/extensions directories. An Extension Development Host is useful for initial loading; verify ordinary status-bar behavior separately in a normal window with a private passive extension copy and a synthetic folder open. A no-folder window can use different fallback colors. Select **Tokencat**, **Carbonfox (Legacy)**, then **Tokencat**, and verify the actual workbench, syntax, diff, status bar and integrated terminal states.
+Use the supplied theme-only extension manifest with fresh user-data/extensions directories. Those directories separate settings and extensions but do not by themselves isolate shared storage or OS integrations; inspect those boundaries before launch and do not claim the entire normal profile is untouched. An Extension Development Host is useful for initial loading; verify ordinary status-bar behavior separately in a normal window with a private passive extension copy and a synthetic folder open. A no-folder window can use different fallback colors. Select **Tokencat**, **Carbonfox (Legacy)**, then **Tokencat**, and verify the actual workbench, syntax, diff, status bar and integrated terminal states.
 
 Alternatively, merge the selected `*-color-customizations.json` fragment into a backed-up settings object. Merge the two named customization objects, preserving unrelated existing keys. Explicit customization keys override a selected theme, so selecting Carbonfox alone will not undo a Tokencat merge: restore the recorded prior values (or remove only keys that did not exist before). Do not replace complete User Settings or assume the generated fragment is a comment-bearing JSONC parser.
+
+### WezTerm
+
+`wezterm/tokencat.toml` is a standalone native color scheme, not a replacement `wezterm.lua`. It includes default text/background, cursor, selection, all 16 ANSI colors, pane separators, scrollbar and tab states. It was parsed and rendered by WezTerm `20240203-110809-5046fc22`; newer versions still require their own validation.
+
+After backing up the relevant existing keys, set `TOKENCAT_SCHEME_FILE` to an explicitly approved copy of this artifact. Integrate only these lines into the existing Lua configuration object, preserving its shell, fonts, keys, domains and other choices:
+
+```lua
+local wezterm = require 'wezterm'
+local colors = wezterm.color.load_scheme(assert(os.getenv('TOKENCAT_SCHEME_FILE')))
+config.color_schemes = config.color_schemes or {}
+config.color_schemes.Tokencat = colors
+config.color_scheme = 'Tokencat'
+```
+
+Do not overwrite an existing customized `Tokencat` scheme without preserving it. For an isolated preview, use the documented `--config-file` and `start --always-new-process --no-auto-connect` options with a task-owned config; a new window alone does not prevent loading the real config. Restore only the prior `color_scheme` and the scheme entry changed by this integration for rollback. No shell/font/keybinding changes are shipped.
+
+### Zellij
+
+`zellij/tokencat.kdl` targets the modern role schema shipped in **Zellij v0.45.1**: text, ribbons, tables, lists, frames, exit statuses and all ten multiplayer colors. It themes Zellij's UI; pane/application ANSI colors still belong to the hosting terminal. It does not ship a session layout, keybindings or plugins.
+
+Copy the file into the explicitly selected Zellij configuration directory's `themes` subdirectory, preserving any existing file. In a backed-up configuration, select `theme "tokencat"`. Validate with the real target Zellij version in an isolated configuration/session first; no native Zellij executable was available during this qualification. The repository reader validates only the emitted nested-block/RGB subset and palette mappings, not all KDL or native rendering. Restore the recorded prior theme and only the copied file for rollback.
 
 ## Artwork, optional fonts and scope
 
@@ -70,7 +94,7 @@ Both skins share the unchanged 29×11 token-cat from [ascii-art](ascii-art/READM
 
 `fonts/install-hack-nerd-font.sh` remains optional and unchanged. It targets Nerd Fonts `v3.5.1`, verifies its pinned digest before extraction, and installs only Mono TTFs. Do not run it merely to use the palette. If registry registration fails, copied fonts remain and require deliberate recovery. The test suite uses temporary supplied ZIPs and a fail-closed fake-`reg` guard; it never invokes real registration or downloads fonts.
 
-WezTerm, Zellij and Neovim configurations are not shipped or claimed supported. The retired gist [`16349ada05bdf04399aa328fd0231184`](https://gist.github.com/16349ada05bdf04399aa328fd0231184) is historical; it does not supply the new variant or a migration for whole workstation settings.
+The named Hermes surfaces, VS Code, Windows Terminal, WezTerm and Zellij have dedicated artifacts or the shared native skin listed above. Neovim and arbitrary other apps are not claimed supported; no whole-workstation configuration is shipped. The retired gist [`16349ada05bdf04399aa328fd0231184`](https://gist.github.com/16349ada05bdf04399aa328fd0231184) is historical, not a current artifact or settings migration.
 
 ## Rights
 

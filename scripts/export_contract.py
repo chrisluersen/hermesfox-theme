@@ -4,15 +4,21 @@ import re
 from pathlib import Path
 
 if __package__:
-    from .theme_io import strict_json, strict_yaml
+    from .terminal_exports import parse_companion_export
+    from .terminal_exports import parse_zellij_theme as parse_zellij_theme
+    from .theme_io import strict_json
 else:
-    from theme_io import strict_json, strict_yaml
+    from terminal_exports import parse_companion_export
+    from terminal_exports import parse_zellij_theme as parse_zellij_theme
+    from theme_io import strict_json
 
 EXPORT_FILES = (
     "windows-terminal/tokencat.scheme.json",
     "vscode/tokencat.vscode-theme.json",
     "vscode/tokencat-color-customizations.json",
     "hermes/dashboard-themes/tokencat.yaml",
+    "wezterm/tokencat.toml",
+    "zellij/tokencat.kdl",
 )
 HEX = re.compile(r"#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\Z")
 
@@ -49,7 +55,7 @@ def validate_exports(root: Path):
         try:
             path = root / relative
             text = path.read_text(encoding="utf-8")
-            data = strict_yaml(text) if path.suffix == ".yaml" else strict_json(text)
+            data = parse_companion_export(path, text)
             if not isinstance(data, dict):
                 raise ValueError("export must be an object")
             colors = color_leaves(data)

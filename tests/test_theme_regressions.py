@@ -1,8 +1,12 @@
+import importlib.util
 import json
+import os
 import shutil
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.validate_theme import CANONICAL_COLOR_KEYS, _parse_skin, validate_repository
 
@@ -169,6 +173,49 @@ def contrast_ratio(first, second):
 
 
 class ContrastTests(unittest.TestCase):
+    def test_cli_completion_text_states_clear_aa(self):
+        colors = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))[
+            "colors"
+        ]
+        # Native styles use ui_label, not banner_title, for selected metadata.
+        pairs = (
+            ("banner_text", "completion_menu_bg"),
+            ("banner_title", "completion_menu_current_bg"),
+            ("banner_dim", "completion_menu_meta_bg"),
+            ("ui_label", "completion_menu_meta_current_bg"),
+        )
+        for foreground, background in pairs:
+            with self.subTest(foreground=foreground, background=background):
+                self.assertGreaterEqual(contrast_ratio(colors[foreground], colors[background]), 4.5)
+
+    def test_vscode_suggestion_text_states_clear_aa(self):
+        for relative, color_key in (
+            ("vscode/tokencat.vscode-theme.json", "colors"),
+            ("vscode/tokencat-color-customizations.json", "workbench.colorCustomizations"),
+        ):
+            colors = json.loads((ROOT / relative).read_text(encoding="utf-8"))[color_key]
+            pairs = (
+                ("editorSuggestWidget.foreground", "editorSuggestWidget.background"),
+                ("editorSuggestWidget.highlightForeground", "editorSuggestWidget.background"),
+                (
+                    "editorSuggestWidget.selectedForeground",
+                    "editorSuggestWidget.selectedBackground",
+                ),
+                (
+                    "editorSuggestWidget.focusHighlightForeground",
+                    "editorSuggestWidget.selectedBackground",
+                ),
+            )
+            for foreground, background in pairs:
+                with self.subTest(export=relative, foreground=foreground, background=background):
+                    # Focused matches use a distinct VS Code role, not highlightForeground.
+                    # Require explicit colors rather than assuming inherited defaults.
+                    self.assertIn(foreground, colors)
+                    self.assertIn(background, colors)
+                    self.assertGreaterEqual(
+                        contrast_ratio(colors[foreground], colors[background]), 4.5
+                    )
+
     def test_normal_text_pairs_clear_aa(self):
         base = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))["base"]
         pairs = (
@@ -219,3 +266,29 @@ class ContrastTests(unittest.TestCase):
         for foreground, background in pairs:
             with self.subTest(foreground=foreground, background=background):
                 self.assertGreaterEqual(contrast_ratio(colors[foreground], colors[background]), 4.5)
+
+
+@unittest.skipUnless(os.environ.get("TOKENCAT_HERMES_SOURCE"), "native Hermes source not supplied")
+class NativeCliContrastTests(unittest.TestCase):
+    def test_native_selected_completion_metadata_clears_aa(self):
+        source = Path(os.environ["TOKENCAT_HERMES_SOURCE"])
+        spec = importlib.util.spec_from_file_location(
+            "tokencat_native_skin_engine", source / "hermes_cli/skin_engine.py"
+        )
+        module = importlib.util.module_from_spec(spec)
+        # Load the native skin module without agent/server bootstrap or reading
+        # the active profile; inject this candidate at the existing boundary.
+        with (
+            patch.object(sys, "path", [str(source), *sys.path]),
+            patch.dict(sys.modules, {module.__name__: module}),
+        ):
+            spec.loader.exec_module(module)
+            skin = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))
+            candidate = module._build_skin_config(skin)
+            with patch.object(module, "get_active_skin", return_value=candidate):
+                styles = module.get_prompt_toolkit_style_overrides()
+        actual = styles["completion-menu.meta.completion.current"]
+        background, foreground = actual.split()
+        self.assertEqual(foreground, skin["colors"]["ui_label"])
+        self.assertEqual(background, "bg:" + skin["colors"]["completion_menu_meta_current_bg"])
+        self.assertGreaterEqual(contrast_ratio(foreground, background.removeprefix("bg:")), 4.5)
