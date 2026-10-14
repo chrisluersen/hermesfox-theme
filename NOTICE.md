@@ -1,6 +1,6 @@
 # NOTICE
 
-This repository distributes the Carbonfox theme files and the explicitly identified artwork below. Redistribution status is recorded conservatively; an archive page or search result is not treated as a license.
+This repository distributes the preserved Carbonfox and upgraded Tokencat theme files and the explicitly identified artwork below. Redistribution status is recorded conservatively; an archive page or search result is not treated as a license.
 
 | Path | Description / creator | Stable source | License or permission | Changes | Status |
 |---|---|---|---|---|---|
@@ -12,3 +12,9 @@ This repository distributes the Carbonfox theme files and the explicitly identif
 The former `banner-art/` design archive is intentionally not part of this repository's release surface. Its external and unattributed artwork, generated previews, backups, and patch bundles did not have uniformly established redistribution rights or release value, so they were removed rather than reclassified as licensed.
 
 This file is documentation, not legal advice. If a source does not provide a clear license or direct permission, treat redistribution as blocked.
+
+## Tokencat variant and complete upstream notice
+
+The upgraded `palettes/tokencat.json`, `hermes/skins/tokencat.yaml`, `hermes/dashboard-themes/tokencat.yaml`, `windows-terminal/tokencat.scheme.json`, `vscode/tokencat*.json`, `wezterm/tokencat.toml`, and `zellij/tokencat.kdl` derive from the preserved Carbonfox bundle. The pinned wrapper, adapter, palette and adaptations are documented in [docs/palette.md](docs/palette.md). The complete upstream MIT notice, copyright 2021 James Simpson, is included in [licenses/nightfox-MIT.txt](licenses/nightfox-MIT.txt); upstream-derived material remains subject to it.
+
+The existing token-cat source is shared by both variants without changing its characters or permission status. The alternate two-tone file is valid Rich markup but remains gated for TUI use. This update obtains no new artwork rights and grants no blanket license for original repository material. `vscode/package.json` therefore retains `UNLICENSED`; the local manifest is not Marketplace ownership or publication permission. No font binaries are included.
