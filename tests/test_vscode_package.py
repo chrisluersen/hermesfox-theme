@@ -14,12 +14,15 @@ class VSCodePackageTests(unittest.TestCase):
         self.assertNotIn("main", manifest)
         self.assertNotIn("activationEvents", manifest)
         themes = manifest["contributes"]["themes"]
-        self.assertEqual({item["label"] for item in themes}, {"Tokencat", "Carbonfox (Legacy)"})
-        self.assertEqual(len(themes), 2)
+        self.assertEqual(
+            {item["label"] for item in themes}, {"Tokencat", "Hermesfox", "Carbonfox (Legacy)"}
+        )
+        self.assertEqual(len(themes), 3)
         self.assertEqual(
             {theme["label"]: theme["path"] for theme in themes},
             {
                 "Tokencat": "./tokencat.vscode-theme.json",
+                "Hermesfox": "./carbonfox.vscode-theme.json",
                 "Carbonfox (Legacy)": "./carbonfox.vscode-theme.json",
             },
         )

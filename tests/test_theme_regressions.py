@@ -109,6 +109,31 @@ class ThemeRegressionTests(unittest.TestCase):
         path.write_text("/home/example/private", encoding="utf-8")
         self.assertEqual(validate_repository(self.root), before)
 
+    def test_word_diff_guard_rejects_each_old_emitted_background(self):
+        for relative, color_key in (
+            ("vscode/tokencat.vscode-theme.json", "colors"),
+            ("vscode/tokencat-color-customizations.json", "workbench.colorCustomizations"),
+        ):
+            path = self.root / relative
+            original = path.read_text(encoding="utf-8")
+            for background, old_color in (
+                ("diffEditor.insertedTextBackground", "#21432f"),
+                ("diffEditor.removedTextBackground", "#512b3d"),
+            ):
+                with self.subTest(export=relative, background=background):
+                    altered = json.loads(original)
+                    altered[color_key][background] = old_color
+                    path.write_text(json.dumps(altered), encoding="utf-8")
+                    try:
+                        with (
+                            patch(__name__ + ".ROOT", self.root),
+                            self.assertRaisesRegex(AssertionError, "not greater than or equal"),
+                        ):
+                            case = ContrastTests("test_vscode_syntax_colors_on_word_diffs_clear_aa")
+                            case.test_vscode_syntax_colors_on_word_diffs_clear_aa()
+                    finally:
+                        path.write_text(original, encoding="utf-8")
+
     def test_all_shared_aliases_are_explicit(self):
         skin = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))
         palette = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))
@@ -216,6 +241,22 @@ class ContrastTests(unittest.TestCase):
                         contrast_ratio(colors[foreground], colors[background]), 4.5
                     )
 
+    def test_added_word_border_remains_distinct_on_darker_diff_backgrounds(self):
+        for relative, color_key in (
+            ("vscode/tokencat.vscode-theme.json", "colors"),
+            ("vscode/tokencat-color-customizations.json", "workbench.colorCustomizations"),
+        ):
+            colors = json.loads((ROOT / relative).read_text(encoding="utf-8"))[color_key]
+            border = "diffEditor.insertedTextBorder"
+            with self.subTest(export=relative):
+                self.assertIn(border, colors)
+                self.assertRegex(colors[border], r"^#[0-9a-fA-F]{6}$")
+                for background in (
+                    "diffEditor.insertedTextBackground",
+                    "diffEditor.insertedLineBackground",
+                ):
+                    self.assertGreaterEqual(contrast_ratio(colors[border], colors[background]), 3.0)
+
     def test_normal_text_pairs_clear_aa(self):
         base = json.loads((ROOT / "palettes/tokencat.json").read_text(encoding="utf-8"))["base"]
         pairs = (
@@ -245,6 +286,37 @@ class ContrastTests(unittest.TestCase):
         for token in ("diff_add_word_bg", "diff_remove_word_bg"):
             with self.subTest(token=token):
                 self.assertGreaterEqual(contrast_ratio(base["foreground"], base[token]), 4.5)
+
+    def test_vscode_syntax_colors_on_word_diffs_clear_aa(self):
+        for relative, color_key in (
+            ("vscode/tokencat.vscode-theme.json", "colors"),
+            ("vscode/tokencat-color-customizations.json", "workbench.colorCustomizations"),
+        ):
+            data = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+            colors = data[color_key]
+            foregrounds = {"editor.foreground": colors["editor.foreground"]}
+            if color_key == "colors":
+                comment_rules = []
+                for rule in data["tokenColors"]:
+                    scope = rule["scope"]
+                    scopes = scope if isinstance(scope, list) else [scope]
+                    foreground = rule["settings"].get("foreground")
+                    if foreground:
+                        foregrounds[", ".join(scopes)] = foreground
+                        if "comment" in scopes:
+                            comment_rules.append(foreground)
+                self.assertTrue(comment_rules, "comment foreground must be explicitly tested")
+            else:
+                token_colors = data["editor.tokenColorCustomizations"]
+                self.assertIn("comments", token_colors)
+                foregrounds.update(token_colors)
+            for role, foreground in foregrounds.items():
+                for background in (
+                    "diffEditor.insertedTextBackground",
+                    "diffEditor.removedTextBackground",
+                ):
+                    with self.subTest(export=relative, role=role, background=background):
+                        self.assertGreaterEqual(contrast_ratio(foreground, colors[background]), 4.5)
 
     def test_emitted_skin_text_and_diff_pairs_clear_aa(self):
         skin = _parse_skin((ROOT / "hermes/skins/tokencat.yaml").read_text(encoding="utf-8"))

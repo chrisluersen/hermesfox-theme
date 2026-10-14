@@ -1,7 +1,7 @@
 {
   "name": "tokencat-theme",
   "displayName": "Tokencat",
-  "description": "Tokencat upgrade and preserved Carbonfox legacy colors for VS Code.",
+  "description": "Tokencat upgrade, Hermesfox original colors and preserved Carbonfox legacy selector.",
   "version": "0.0.1",
   "publisher": "chrisluersen",
   "license": "UNLICENSED",
@@ -13,6 +13,11 @@
         "label": "Tokencat",
         "uiTheme": "vs-dark",
         "path": "./tokencat.vscode-theme.json"
+      },
+      {
+        "label": "Hermesfox",
+        "uiTheme": "vs-dark",
+        "path": "./carbonfox.vscode-theme.json"
       },
       {
         "label": "Carbonfox (Legacy)",

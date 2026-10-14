@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Renamed the repository to `tokencat-theme`; added agent setup instructions,
+  default/Carbonfox comparisons and an environment-independent WezTerm example.
+- Added Hermesfox: original Carbonfox colors, unchanged current token-cat banner
+  and explicit Hermesfox top title. Added its Windows Terminal name and VS Code
+  selector, preserving the archived Carbonfox files and backward-compatible label.
+- Darkened only Tokencat's VS Code word-diff backgrounds to keep syntax-colored
+  comments readable, with emitted-role contrast guards and old-color counterexamples.
+- Added an explicit green added-word border so the darker highlight remains
+  distinguishable from whole-line shading; preserved comment colors and all legacy exports.
 - Added the separately selectable Tokencat upgrade, preserving the Carbonfox
   palette, companion exports and original artwork without changing their bytes.
 - Added mapped Hermes/dashboard, Windows Terminal and VS Code upgrade exports,

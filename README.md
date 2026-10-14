@@ -1,6 +1,17 @@
 # Tokencat
 
-A Carbonfox-derived dark theme for Hermes and companion apps, with an unchanged **Carbonfox (Legacy)** variant for switching back. The repository remains `chrisluersen/hermesfox-theme`; `tokencat-theme` is a proposed future name, not a completed rename or a publication claim.
+A Carbonfox-derived dark theme for Hermes and companion apps, with an unchanged **Carbonfox (Legacy)** variant for switching back. Canonical repository: [chrisluersen/tokencat-theme](https://github.com/chrisluersen/tokencat-theme), formerly `hermesfox-theme`.
+
+## How it differs from Hermes default and Carbonfox
+
+| Choice | Appearance and scope |
+|---|---|
+| Hermes built-in `default` | Classic warm gold/bronze accents, cornsilk text, kawaii spinners and the caduceus banner. It comes with Hermes; this repository does not replace its source. |
+| **Carbonfox (Legacy)** in this bundle | Preserved local Carbonfox adaptation: dark charcoal background, blue/cyan/purple accents and token-cat artwork. It is derived from Nightfox Carbonfox, not an identical copy of every upstream app theme. |
+| **Hermesfox** | Original Carbonfox color roles without TokenCat's readability overrides, the same current token-cat banner, and the explicit **Hermesfox** top title in Hermes. |
+| **Tokencat** | Retains the Carbonfox base palette and token-cat, with explicit semantic aliases and readability overrides for selected suggestions, comments and word diffs. Adds dedicated dashboard, WezTerm and Zellij artifacts alongside Hermes, VS Code and Windows Terminal exports. |
+
+This changes appearance and displayed branding only, not models, reasoning, tools, permissions or agent capabilities. The shipped Windows Terminal schemes have identical color values and differ by name; most changes are surface-specific readability roles, not an entirely new ANSI palette.
 
 This is a source-qualified theme bundle, not a claim of complete app/runtime acceptance. VS Code suggestion states were verified visually and by computed styles through switching and cold restart; WezTerm loaded and displayed the new native scheme. Native Hermes skin/normalizer/converter checks pass, while full CLI/TUI/dashboard/desktop, Windows Terminal and Zellij app acceptance remain outstanding. See [the per-surface evidence matrix](docs/compatibility.md), [palette lineage](docs/palette.md), [validation](docs/validation.md), and [rights/attribution](NOTICE.md).
 
@@ -17,22 +28,62 @@ This is a source-qualified theme bundle, not a claim of complete app/runtime acc
 | WezTerm | `wezterm/tokencat.toml`, scheme **Tokencat** | No legacy companion export existed; preserve the user's prior choice |
 | Zellij | `zellij/tokencat.kdl`, theme `tokencat` | No legacy companion export existed; preserve the user's prior choice |
 
-`vscode/package.json` contributes both themes in one minimal, code-free local extension. Its declared baseline is VS Code `^1.136.2`; older versions are not claimed supported. Local construction does not establish Marketplace ownership or publishing rights.
+`vscode/package.json` contributes Tokencat, Hermesfox and Carbonfox (Legacy) in one minimal, code-free local extension. Hermesfox and Carbonfox (Legacy) share the same original color file; there are two distinct color payloads, not three. Its declared baseline is VS Code `^1.136.2`; older versions are not claimed supported. Local construction does not establish Marketplace ownership or publishing rights.
+
+### Hermesfox — original colors, current artwork and renamed title
+
+Install `hermes/skins/hermesfox.yaml` in the target Hermes home's `skins` directory and select `display.skin: hermesfox` with the supported writer below. Its colors exactly match the archived `carbonfox.yaml`; its `banner_hero` and blank `banner_logo` exactly match TokenCat. Its top title is **Hermesfox** (`branding.agent_name`), not the old **Hermes Agent**. The deliberate identity changes are its name/description/title; the appearance otherwise differs from TokenCat only through color roles. The untouched Carbonfox skin remains available for exact rollback.
+
+For VS Code, select **Hermesfox** in the supplied extension; it reuses the original Carbonfox JSON, while **Carbonfox (Legacy)** remains an equivalent backward-compatible selector. Themes do not change VS Code's application title or add the Hermes ASCII banner. For Windows Terminal, install `windows-terminal/hermesfox.scheme.json` and choose `hermesfox`; all original scheme colors are retained. These companion exports do not rename their applications. The original standalone VS Code customization fragment remains `vscode/vscode-color-customizations.json`. No separate Hermesfox dashboard/WezTerm/Zellij export is supplied; do not substitute TokenCat exports and call them original-role parity. Original colors retain their historical contrast limitations by design.
 
 All original base values, original exports and the cat sources are hash-guarded against revision `793dcd583c873a7512c6d2a5222d4d0b697f704c`. New aliases and readability overrides exist only in the upgrade. Legacy intentionally retains its previous visual limitations; rollback does not mean it has passed new contrast targets.
 
+## Agent installation and setup quick-start
+
+This guide helps another agent install the theme **only after that workstation's user explicitly authorizes the target app/profile and the requested effect**. This README is not permission to install or activate anything. Installing files and changing an app's selected theme are separate actions.
+
+Start with a clean checkout in a user-approved workspace (Hermes agents should keep their own checkout under the active `HERMES_HOME`):
+
+```bash
+git clone https://github.com/chrisluersen/tokencat-theme.git
+cd tokencat-theme
+git rev-parse HEAD
+```
+
+The examples below use Bash/POSIX syntax, including Git Bash on Windows. Use the target machine's actual paths; do not copy paths from another workstation. On Windows, pass native `C:/...` paths to native executables if MSYS path conversion is disabled. Do not install optional tooling without the target user's applicable approval.
+
+1. **Use the intended source revision.** Record `git rev-parse HEAD`, inspect its changes and CI, and confirm it is the revision the user asked to install. A pushed feature branch is not automatically merged, released, or suitable for installation; do not silently substitute `master` or another branch.
+2. **Inventory and preserve the target.** Identify the exact app, version, profile/config directory and current theme selection. Back up only the files/settings that will be changed, preserve existing Carbonfox and unrelated settings, and use each app's supported install/selection method. Never replace an entire app configuration file or profile.
+3. **Follow the matching surface procedure below.** These exports are separate formats; do not copy every file into every application's config directory. No font installation or Hermes source patch is required.
+4. **Read back and verify in the real app.** Confirm the installed files and selected theme, inspect the target surface's meaningful visual states, and state which surfaces were and were not verified. Parser, schema, or unit-test results are not live-app acceptance.
+5. **Stop safely on a blocked target.** If the exact app/window cannot be inspected safely, leave that surface pending. Do not force input to another window, restart an active app, close user tabs, or claim success from a settings write alone. Roll back by restoring the recorded prior selection and only the files/keys changed.
+
+| Surface | Artifact | Setup instructions |
+|---|---|---|
+| Hermes CLI / TUI / desktop | `hermes/skins/tokencat.yaml` | [Hermes procedure](#hermes-cli-tui-and-desktop); set `HERMES_HOME` explicitly and use `hermes config set display.skin tokencat`. |
+| Hermes dashboard | `hermes/dashboard-themes/tokencat.yaml` | Follow the separate Dashboard procedure below; install independently from the Hermes skin, then select in its picker. |
+| Windows Terminal | `windows-terminal/tokencat.scheme.json` | [Windows Terminal procedure](#windows-terminal); merge the scheme by unique name and change only the intended profile's `colorScheme`. |
+| VS Code | `vscode/` theme-only extension | [VS Code procedure](#vs-code); with an already available/approved `@vscode/vsce` CLI, run `vsce package` from `vscode/`, install the VSIX with the VS Code CLI, then select **Tokencat**. The contribution also retains **Carbonfox (Legacy)**. |
+| WezTerm | `wezterm/tokencat.toml` | [WezTerm procedure](#wezterm); integrate the standalone color scheme into the existing Lua config without replacing it. |
+| Zellij | `zellij/tokencat.kdl` | [Zellij procedure](#zellij); install the named theme and validate with the target's native Zellij version before selecting it. |
+
+The detailed steps below include per-surface rollback and known qualification limits. In particular, no native Zellij runtime was available during this bundle's qualification, and Windows Terminal's visual states still require verification on the target installation.
+
 ## Safe installation and rollback — only when separately authorized
 
-No live theme selection was activated. VS Code used separate settings/extension directories, and WezTerm used a separate config/process. VS Code also opened existing app-global shared storage; without a before-image, its integrity or unchanged state cannot be asserted. Captured fingerprint matches establish preservation only for the specifically measured files at the time of comparison, not the entire profile or an ongoing guarantee. A later comparison detected configuration drift; its cause was not established or reversed, and the legacy theme remained selected. Rendered-state evidence is not proof of whole-profile isolation. First qualify the exact app/version and all relevant storage boundaries before a future preview. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
+Source qualification did not itself activate a live theme selection; any downstream deployment is a separate, user-authorized operation. VS Code used separate settings/extension directories, and WezTerm used a separate config/process. VS Code also opened existing app-global shared storage; without a before-image, its integrity or unchanged state cannot be asserted. Captured fingerprint matches establish preservation only for the specifically measured files at the time of comparison, not the entire profile or an ongoing guarantee. A later comparison detected configuration drift; its cause was not established or reversed, and the legacy theme remained selected. Rendered-state evidence is not proof of whole-profile isolation. First qualify the exact app/version and all relevant storage boundaries before a future preview. Back up only the target files/keys, record prior selections, and never replace a whole profile, `config.yaml`, VS Code User Settings, or Windows Terminal `settings.json`. Use artifacts from an explicitly reviewed revision; a branch upload is not a release or proof of full runtime acceptance.
 
 ### Hermes CLI, TUI and desktop
 
-1. Explicitly identify the target Hermes home; do not assume `~/.hermes` on Windows or change another profile. Back up any existing `skins/tokencat.yaml`, `skins/carbonfox.yaml`, and the prior `display.skin` value.
-2. Copy the two repository skin files into that home's `skins` directory. Keep both names. Do not overwrite an existing customized file without preserving it.
+1. Explicitly identify the target Hermes home; do not assume `~/.hermes` on Windows or change another profile. Back up any existing `skins/tokencat.yaml`, `skins/hermesfox.yaml`, `skins/carbonfox.yaml`, and the prior `display.skin` value.
+2. Copy the repository skin files into that home's `skins` directory. Keep all names. Do not overwrite an existing customized file without preserving it.
 3. After authorization, in a shell with `TARGET_HERMES_HOME` explicitly set, use the supported writer:
 
 ```bash
 : "${TARGET_HERMES_HOME:?Choose the explicit approved target home first}"
+mkdir -p "$TARGET_HERMES_HOME/skins"
+# Only after preserving any existing files with these names:
+cp hermes/skins/tokencat.yaml hermes/skins/hermesfox.yaml hermes/skins/carbonfox.yaml "$TARGET_HERMES_HOME/skins/"
 env HERMES_HOME="$TARGET_HERMES_HOME" hermes skin list
 env HERMES_HOME="$TARGET_HERMES_HOME" hermes config set display.skin tokencat
 env HERMES_HOME="$TARGET_HERMES_HOME" hermes config get display.skin
@@ -50,6 +101,8 @@ env HERMES_HOME="$TARGET_HERMES_HOME" hermes config get display.skin
 
 For complete rollback, restore the recorded prior selection (which may not have been Carbonfox) and only the specific overwritten files from the backup. No Hermes source patch or plugin is needed or supplied.
 
+To select the original-color variant with the current artwork and renamed top title instead, use `env HERMES_HOME="$TARGET_HERMES_HOME" hermes config set display.skin hermesfox`, then read back `display.skin` and verify **Hermesfox** in the actual target renderer. This command is subject to the same target-home and authorization checks.
+
 ### Dashboard — a separate format and selection
 
 Copy `hermes/dashboard-themes/tokencat.yaml` to the explicitly selected home's `dashboard-themes` directory only after authorization. Refresh and choose **Tokencat** in the dashboard theme picker. Verify `/api/dashboard/themes` and the browser's computed colors: a backend that drops `colorOverrides` or `palette.warmGlow` blocks full-fidelity acceptance. Merely seeing a named theme in the picker is insufficient.
@@ -58,9 +111,18 @@ The skin file in `skins/` does not theme the dashboard. Roll back to the exact p
 
 ### Windows Terminal
 
-Back up the settings file, then merge both scheme objects into its existing `schemes` array **by unique name**. Do not replace the whole array or create duplicate names. Change only the intended profile's `colorScheme`: `tokencat` for the upgrade, `carbonfox` for legacy. Verify all 16 ANSI colors, truecolor, selection/cursor and glyphs in that profile. For full rollback restore its prior `colorScheme` and only keys changed by the merge. No font change is required.
+Back up the settings file, then merge the desired scheme objects into its existing `schemes` array **by unique name**: `windows-terminal/tokencat.scheme.json` is named `tokencat`, `windows-terminal/hermesfox.scheme.json` is named `hermesfox`, and `windows-terminal/scheme.json` is named `carbonfox`. Do not replace the whole array or create duplicate names; preserve any existing customized scheme before updating it. Change only the intended profile's `colorScheme`: `tokencat` for the upgrade, `hermesfox` for the original-color named variant, or `carbonfox` for the archived legacy name. Verify all 16 ANSI colors, truecolor, selection/cursor and glyphs in that profile. For full rollback restore its prior `colorScheme` and only keys changed by the merge. No font change is required.
 
 ### VS Code
+
+For normal installation, first confirm VS Code meets the manifest's `^1.136.2` baseline and that the theme selection/profile is authorized. From the repository root, with an available approved `@vscode/vsce` CLI:
+
+```bash
+(cd vscode && vsce package)
+code --install-extension vscode/tokencat-theme-0.0.1.vsix --force
+```
+
+Use the installed VS Code command-line launcher (`code` / `code.cmd`), not the Electron GUI executable as a substitute. `--force` updates the same theme extension ID; back up an existing package before replacing it. This builds a local VSIX, not a Marketplace publication. Select **Tokencat** through **Preferences: Color Theme**, then verify the selected `workbench.colorTheme`, actual suggestion and word-diff states, and Carbonfox switch-back. Existing per-user/workspace color customizations can override the theme: inspect and preserve them rather than deleting them wholesale. For another VS Code profile, use that installation's supported profile option explicitly. Do not install into every profile.
 
 Use the supplied theme-only extension manifest with fresh user-data/extensions directories. Those directories separate settings and extensions but do not by themselves isolate shared storage or OS integrations; inspect those boundaries before launch and do not claim the entire normal profile is untouched. An Extension Development Host is useful for initial loading; verify ordinary status-bar behavior separately in a normal window with a private passive extension copy and a synthetic folder open. A no-folder window can use different fallback colors. Select **Tokencat**, **Carbonfox (Legacy)**, then **Tokencat**, and verify the actual workbench, syntax, diff, status bar and integrated terminal states.
 
@@ -70,17 +132,17 @@ Alternatively, merge the selected `*-color-customizations.json` fragment into a 
 
 `wezterm/tokencat.toml` is a standalone native color scheme, not a replacement `wezterm.lua`. It includes default text/background, cursor, selection, all 16 ANSI colors, pane separators, scrollbar and tab states. It was parsed and rendered by WezTerm `20240203-110809-5046fc22`; newer versions still require their own validation.
 
-After backing up the relevant existing keys, set `TOKENCAT_SCHEME_FILE` to an explicitly approved copy of this artifact. Integrate only these lines into the existing Lua configuration object, preserving its shell, fonts, keys, domains and other choices:
+After backing up the relevant existing keys, copy `wezterm/tokencat.toml` into a `colors` subdirectory beside the actual loaded WezTerm configuration file. Determine that directory on the target machine; it is not necessarily the repository or the shell's working directory. Integrate these lines after the existing `config` object is created and before `return config`, preserving its shell, fonts, keys, domains and other choices:
 
 ```lua
 local wezterm = require 'wezterm'
-local colors = wezterm.color.load_scheme(assert(os.getenv('TOKENCAT_SCHEME_FILE')))
+local colors = wezterm.color.load_scheme(wezterm.config_dir .. '/colors/tokencat.toml')
 config.color_schemes = config.color_schemes or {}
 config.color_schemes.Tokencat = colors
 config.color_scheme = 'Tokencat'
 ```
 
-Do not overwrite an existing customized `Tokencat` scheme without preserving it. For an isolated preview, use the documented `--config-file` and `start --always-new-process --no-auto-connect` options with a task-owned config; a new window alone does not prevent loading the real config. Restore only the prior `color_scheme` and the scheme entry changed by this integration for rollback. No shell/font/keybinding changes are shipped.
+The persistent scheme path works for GUI launches without a shell environment variable. Do not duplicate an existing `local wezterm` declaration or overwrite an existing customized `Tokencat` scheme without preserving it. Validate the integrated configuration using `wezterm --config-file <actual-config-file> show-keys`, then inspect a fresh launch only when safe and authorized; a successful parse is not visual acceptance. For an isolated preview, use `--config-file` and `start --always-new-process --no-auto-connect` with a task-owned config; a new window alone does not prevent loading the real config. Restore the recorded prior `color_scheme`, the prior scheme entry and only the copied file/config lines changed by this integration for rollback. No shell/font/keybinding changes are shipped.
 
 ### Zellij
 
