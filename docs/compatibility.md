@@ -1,6 +1,6 @@
 # Compatibility evidence — source-qualified bundle
 
-**Status: source/data checks pass; changed VS Code suggestion states have settings-separated renderer evidence and WezTerm's native scheme has config-separated runtime evidence. Overall cross-surface app acceptance remains incomplete.** No live theme selection was activated. VS Code opened existing app-global shared storage; fingerprints protect only their specifically measured files, not the entire profile or shared database. This is not a production-readiness claim. Consult GitHub Actions for results on the exact commit; local success does not establish remote CI success. Publication of theme artifacts does not close the remaining runtime gates.
+**Status: source/data checks pass; changed VS Code suggestion and word-diff states have settings-separated renderer evidence and WezTerm's native scheme has config-separated runtime evidence. Overall cross-surface app acceptance remains incomplete.** The qualification previews did not themselves activate normal-profile theme selections; subsequent deployments are separate operations. VS Code opened existing app-global shared storage; fingerprints protect only their specifically measured files, not the entire profile or shared database. This is not a production-readiness claim. Consult GitHub Actions for results on the exact commit; local success does not establish remote CI success. Publication of theme artifacts does not close the remaining runtime gates.
 
 ## Pinned comparison targets
 
@@ -67,7 +67,7 @@ Runtime observations apply to theme revision `4529f3165234f16c8e1fb36f5ee09c1faa
 
 ## Selected-state follow-up — settings-separated VS Code verified
 
-Both upgrade VS Code exports now author **86** workbench colors: the prior 84 plus `editorSuggestWidget.selectedForeground` (`#f2f4f8`) and `editorSuggestWidget.focusHighlightForeground` (`#3ddbd9`). Existing blue unfocused matches and the selected background (`#525253`) are unchanged. Palette mappings use existing base tokens. That VS-only follow-up left base values, legacy files, Hermes skins and Windows Terminal schemes unchanged; the separate CLI metadata readability fix below changes one upgrade skin background.
+At the selected-state follow-up, both upgrade VS Code exports authored **86** workbench colors: the prior 84 plus `editorSuggestWidget.selectedForeground` (`#f2f4f8`) and `editorSuggestWidget.focusHighlightForeground` (`#3ddbd9`). The current word-diff successor authors **87**, adding `diffEditor.insertedTextBorder`. Existing blue unfocused matches and the selected background (`#525253`) are unchanged. Palette mappings use existing base tokens. That VS-only follow-up left base values, legacy files, Hermes skins and Windows Terminal schemes unchanged; the separate CLI metadata readability fix below changes one upgrade skin background.
 
 The source review's blue-on-selected-background calculation (3.31:1) was not proof of an effective focused-match defect: VS Code uses a distinct focused-match role. The follow-up makes that previously inherited state explicit and tests selected text and matches in both exports. Authored selected-text contrast is 7.09:1 and focused-match contrast is 4.58:1; source-level tests do not establish actual rendered acceptance.
 
@@ -77,14 +77,22 @@ The real word-suggestion popup showed teal `alp` matches on the focused gray `al
 
 These observations qualify the changed suggestion states, switching and restart, not every VS Code state, whole-profile isolation or Marketplace packaging. Raw profiles, captures and local receipts remain outside the distributable payload.
 
-## Independent-review fixes — source qualification, fresh review pending
+## Independent-review fixes — historical qualification
 
 - The CLI consumer's selected metadata style uses `ui_label`, not the main selected label's foreground. Only `completion_menu_meta_current_bg` changed from `border` to existing `surface_selected` (`#2a2a2a`), increasing cyan metadata contrast from 3.30:1 to 6.07:1. The emitted-role guard and the actual native pure style-generation function both reproduced the failure before the fix and pass afterward. This is not a new rendered CLI acceptance claim.
 - Public preservation claims are narrowed to measured files and now disclose the shared-storage limitation above. No private database path or log is published.
 - RGB nodes in the bounded KDL reader now require ASCII `[0-9]` digits. Arabic-Indic, Devanagari, full-width and mixed decimal tokens reproduced the rejection gap before the fix and are now rejected. The emitted KDL is unchanged; this is not native Zellij parser acceptance.
 - Companion regressions calculate contrast for WezTerm body, cursor, selection and every authored tab state, plus Zellij base/emphasis foregrounds against their respective declared role backgrounds. In-memory low-contrast mutations demonstrate each checked foreground guard rejects its counterexample; these calculations do not establish effective rendered app states.
-- Current source checks and artifact fingerprints are retained in a new local evidence manifest. Earlier receipts remain historical rather than being rewritten as proof for changed bytes. A fresh native independent review is required before commit, push or merge.
+- Source checks and artifact fingerprints were retained in a local evidence manifest. Earlier receipts remain historical rather than being rewritten as proof for changed bytes. These fixes received independent review before the original bundle was merged through PR #2; they are not awaiting their first review.
 - A later comparison detected that one previously fingerprinted configuration file had changed since the older baseline. Its current theme selection remained the legacy skin and installed skin fingerprints still matched. The change's cause was not established or reversed; earlier matching measurements are historical evidence, not an ongoing whole-profile preservation guarantee.
+
+## Word-diff successor — reviewed source and bounded native rendering
+
+Commit `8243921b7af72d50c322f37e1be444602d5cc4f2` darkens only the VS Code word fills to `#1a3525` (inserted) and `#462535` (removed), retaining syntax comment `#97999b`, and adds opaque inserted-word border `#25be6a`. Both theme and customization exports have identical roles. All explicitly emitted syntax foregrounds clear 4.5:1 on both word fills; four old-background mutations exercise both exports and fail the regression guard. Border contrast clears 3:1 against word and line backgrounds.
+
+Dedicated VS Code diff editors rendered syntax-colored comments with measured contrast **4.6495:1** and **4.6596:1**, including a cold-start theme and standalone customizations over Carbonfox (Legacy). The inserted-word border was visible with nonzero computed width; display scaling makes an exact one-CSS-pixel assertion inappropriate. Fourteen measured protected files matched their baseline afterward. This is bounded word-diff evidence, not whole-profile/shared-storage preservation or full accessibility coverage; raw captures remain private.
+
+Independent review of the seven-file fix passed without security or logic concerns. The full local suite passed **81 tests**, including the actual native Hermes style-generator integration, plus both validators, Ruff lint/format, shell syntax, ShellCheck and whitespace checks. Exact-commit GitHub Actions runs for `8243921` and README follow-up `c9f7e1a` passed on Linux/Python 3.11 and Windows/Python 3.14. Hosted CI explicitly skips the optional native Hermes integration when no source tree is supplied; its local pass is separate evidence. This does not assert that the normal installed VS Code package was updated. Later documentation changes require their own exact-commit checks.
 
 ## Rollback
 
